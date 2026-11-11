@@ -1,16 +1,17 @@
 <?php
 /* ==============================================================================
    FILE: dashboard.php
-   PURPOSE: Main Dashboard page (matching the new Dark Navy reference image).
+   PURPOSE: Main Dashboard page (Dark Navy Midnight Theme).
 
    CSS & JAVASCRIPT ASSET SOURCES / DOCUMENTATION NOTE:
    - "css/bootstrap.min.css":
        Bootstrap v3.3.7 CSS framework stored locally in the "css" directory.
-       Provides base responsive grid, layout resets, and typography.
    - "css/dashboard.css":
        Custom dark stylesheet located in the "css" directory.
        Provides the dark midnight blue palette (#0b1020, #0e1428, #131a2e),
-       royal blue button (#4f6fe6), and table rows matching the user's reference image.
+       spacious expanded card, royal blue icon button (#4f6fe6), and red logout button.
+   - "img/lgf-Logo.png":
+       Company logo displayed in sidebar and card header.
    - "js/jquery-1.10.2.min.js":
        Local jQuery library located in the "js" directory.
    - "js/bootstrap.min.js":
@@ -26,13 +27,13 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-// User details for dashboard display (matching reference image defaults)
+// User details for dashboard display
 $companyName    = !empty($_SESSION['scomnam']) && $_SESSION['scomnam'] !== 'Ravi Breeder Farm'
     ? $_SESSION['scomnam'] 
     : 'Ramico International (Pvt) Ltd';
 $userName       = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
-$userEmail      = !empty($_SESSION['dashboard_email']) ? $_SESSION['dashboard_email'] : 'user@example.com';
-$passwordExpiry = !empty($_SESSION['dashboard_password_expiry']) ? $_SESSION['dashboard_password_expiry'] : '2026-12-31';
+$userEmail      = !empty($_SESSION['dashboard_email']) ? $_SESSION['dashboard_email'] : 'rumeshdezoysa@gmail.com';
+$passwordExpiry = !empty($_SESSION['dashboard_password_expiry']) ? $_SESSION['dashboard_password_expiry'] : '2026-12-11';
 $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] : '-';
 ?>
 <!DOCTYPE html>
@@ -62,22 +63,29 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
     <!-- Modular Sidebar included from sidebar.php -->
     <?php include 'sidebar.php'; ?>
 
-    <!-- Main Content Area (Matching reference image) -->
+    <!-- Main Content Area -->
     <main class="main-content">
 
-        <!-- Top Action Button ("Toggle Sidebar" button in image) -->
+        <!-- Top Action Button with Matching Sleek Icon (User Request 3) -->
         <div class="toolbar-actions">
             <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn" title="Toggle Sidebar">
-                Toggle Sidebar
+                <svg class="toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                <span>Toggle Sidebar</span>
             </button>
         </div>
 
-        <!-- Center Information Card (Dark Navy Slate Container) -->
+        <!-- Center Information Card (Expanded to fill available space nicely - User Request 1) -->
         <div class="dashboard-card">
 
-            <!-- Card Header: Logo Badge & Title -->
+            <!-- Card Header: Logo Badge with Logo & Title -->
             <div class="card-header-area">
-                <div class="card-logo-badge">Logo</div>
+                <div class="card-logo-badge" title="Logo">
+                    <img src="img/lgf-Logo.png" alt="Logo">
+                </div>
                 <h2 class="card-main-title">Service Provider Name</h2>
             </div>
 

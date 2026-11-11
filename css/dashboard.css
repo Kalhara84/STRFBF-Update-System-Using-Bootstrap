@@ -1,17 +1,18 @@
 /* ==============================================================================
    FILE: css/dashboard.css
-   PURPOSE: Dark Navy / Midnight Blue theme for the Dashboard (matching the uploaded image).
+   PURPOSE: Dark Navy / Midnight Blue theme for the Dashboard.
 
    CSS & ASSET SOURCES NOTE:
    - Base framework: "css/bootstrap.min.css" (Bootstrap v3.3.7 - stored locally)
-   - Layout & Theme: Custom dark theme tailored to match the user's reference image
-   - Color Palette (Sampled directly from image):
+   - Layout & Theme: Custom dark theme matching user reference specifications
+   - Color Palette:
        * Main page background: #0b1020 (Deep Midnight Navy)
        * Sidebar background:  #0e1428 (Dark Slate Navy)
        * Sidebar border:      #1a223e
        * Active menu item:    #1a2444
-       * Toggle button:       #4f6fe6 (Royal Indigo Blue)
-       * Main card container: #131a2e (Elevated Dark Slate Card)
+       * Toggle button:       #4f6fe6 (Royal Indigo Blue with SVG icon)
+       * Logout button:       #e53935 -> #c62828 (Prominent Vibrant Red)
+       * Main card container: #131a2e (Expanded Dark Slate Card - fills space nicely)
        * Table box inside:    #10162a with borders #1f2a4a
        * Typography:          #ffffff (Headings & Values), rgba(255,255,255,0.7) (Subtitles)
    - All assets and styles are 100% offline and use local files only.
@@ -58,6 +59,23 @@ html, body {
 
 .sidebar-header {
     padding: 24px 20px 16px 22px;
+}
+
+/* Sidebar Logo above company name */
+.sidebar-logo-wrap {
+    margin-bottom: 14px;
+    display: inline-block;
+}
+
+.sidebar-logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: block;
 }
 
 /* Company Title & User */
@@ -121,7 +139,7 @@ html, body {
     background-color: #151e3a;
 }
 
-/* Active / Expanded Menu Item (matching (1) Operations in image) */
+/* Active / Expanded Menu Item */
 .sidebar-nav-item.active > .sidebar-nav-link {
     background-color: #1a2444;
     color: #ffffff;
@@ -161,35 +179,59 @@ html, body {
     background-color: rgba(79, 111, 230, 0.15);
 }
 
-/* Sidebar Footer (Logout) */
+/* Sidebar Footer: Vibrant Red Logout Button */
 .sidebar-footer {
-    padding: 18px 22px 24px 22px;
+    padding: 18px 18px 24px 18px;
     border-top: 1px solid #1a223e;
 }
 
-.sidebar-footer-link {
-    display: block;
-    color: rgba(255, 255, 255, 0.85);
+.sidebar-logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
     font-size: 14px;
-    padding: 6px 0;
-    text-decoration: none;
-    transition: color 0.15s ease;
+    font-weight: 600;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.35);
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
-.sidebar-footer-link:hover,
-.sidebar-footer-link:focus {
-    color: #ffffff;
-    text-decoration: underline;
+.sidebar-logout-btn:hover,
+.sidebar-logout-btn:focus {
+    background: linear-gradient(135deg, #ef5350 0%, #d32f2f 100%);
+    box-shadow: 0 6px 16px rgba(229, 57, 53, 0.45);
+    transform: translateY(-1px);
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.sidebar-logout-btn:active {
+    transform: translateY(1px);
+}
+
+.sidebar-logout-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
 }
 
 /* ==============================================================================
-   MAIN CONTENT AREA (Matching reference image)
+   MAIN CONTENT AREA (Spacious & Modern)
    ============================================================================== */
 .main-content {
     flex: 1;
-    padding: 24px 36px;
+    padding: 24px 36px 40px 36px;
     background-color: #0b1020;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Top Action Toolbar */
@@ -197,18 +239,18 @@ html, body {
     margin-bottom: 24px;
 }
 
-/* Toggle Sidebar Button (#4f6fe6 matching image) */
+/* Toggle Sidebar Button with matching sleek icon */
 .btn-toggle-sidebar {
     background-color: #4f6fe6;
     border: none;
     color: #ffffff;
     font-size: 14px;
     font-weight: 600;
-    padding: 8px 22px;
+    padding: 9px 20px;
     border-radius: 8px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
     transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
     box-shadow: 0 4px 12px rgba(79, 111, 230, 0.32);
     cursor: pointer;
@@ -222,45 +264,56 @@ html, body {
     text-decoration: none;
     outline: none;
     box-shadow: 0 6px 16px rgba(79, 111, 230, 0.42);
+    transform: translateY(-1px);
 }
 
 .btn-toggle-sidebar:active {
     transform: translateY(1px);
 }
 
-/* Center Content Card (Dark Navy Slate #131a2e matching image) */
+.toggle-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Center Content Card (Expanded to fill available space beautifully) */
 .dashboard-card {
     background-color: #131a2e;
     border: 1px solid #1e2848;
     border-radius: 12px;
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
-    padding: 40px 45px 45px 45px;
-    max-width: 960px;
-    margin: 0 0 40px 0;
+    padding: 38px 46px 44px 46px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 30px 0;
 }
 
 /* Header inside card: Logo badge & Title */
 .card-header-area {
     text-align: center;
     padding-bottom: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
     border-bottom: 1px solid #1c2646;
 }
 
 .card-logo-badge {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     background-color: #1b2444;
     border: 1px solid #2a3867;
-    color: #8da2d6;
-    font-size: 12px;
-    font-weight: 600;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.card-logo-badge img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 .card-main-title {
@@ -274,14 +327,15 @@ html, body {
 /* Inner Table Box */
 .card-table-box {
     border: 1px solid #1f2a4a;
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: #10162a;
     overflow: hidden;
+    width: 100%;
 }
 
 /* Information Rows with Horizontal Dividers */
 .info-row {
-    padding: 16px 24px;
+    padding: 18px 28px;
     border-bottom: 1px solid #1f2a4a;
     display: flex;
     align-items: center;
@@ -289,7 +343,7 @@ html, body {
 }
 
 .info-row:hover {
-    background-color: #131b34;
+    background-color: #141c35;
 }
 
 .info-row:last-child {
@@ -297,8 +351,8 @@ html, body {
 }
 
 .info-label {
-    width: 240px;
-    min-width: 180px;
+    width: 280px;
+    min-width: 200px;
     font-size: 15px;
     font-weight: 600;
     color: #ffffff;
@@ -308,7 +362,7 @@ html, body {
 .info-value {
     flex: 1;
     font-size: 15px;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.95);
     margin: 0;
     font-weight: 400;
 }
@@ -332,6 +386,7 @@ html, body {
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;
+        padding: 14px 18px;
     }
     .info-label {
         width: 100%;
