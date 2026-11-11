@@ -58,6 +58,6 @@ $paymentPages = array(
 </div>
 <script src="jquery/jquery-1.10.2.min.js"></script>
 <script src="js/dashboard.js"></script>
-<script src="js/ent_dashboard_dpmm.js"></script>
+<script src="js/ent_dashboard_dpmm.js?v=<?php echo filemtime(dirname(__FILE__) . '/js/ent_dashboard_dpmm.js'); ?>"></script>
 </body>
 </html>

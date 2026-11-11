@@ -57,13 +57,31 @@
 
     // Select tab based on URL hash (e.g. #amend, #approvals)
     function fromHash() {
-        var hash = window.location.hash.slice(1);
-        if (!hash) return;
+        var hash = window.location.hash.slice(1) || 'add';
         for (var i = 0; i < tabs.length; i++) {
             if (tabs[i].getAttribute('data-section') === hash) {
                 selectTab(tabs[i], true);
                 return;
             }
+        }
+    }
+
+    // Keep the highlight aligned with the actual iframe page after navigation,
+    // form submissions and browser history, not only after a tab click.
+    function syncLoadedTab() {
+        var current = new URL(frame.contentWindow.location.href);
+        for (var i = 0; i < tabs.length; i++) {
+            var target = new URL(tabs[i].getAttribute('href'), window.location.href);
+            if (current.pathname !== target.pathname) continue;
+            var mode = target.searchParams.get('cmdopt');
+            if (mode && current.searchParams.get('cmdopt') !== mode) {
+                // POST responses may omit cmdopt from the URL. Retain the
+                // currently selected Add/Amend tab in that case.
+                if (current.searchParams.has('cmdopt') || !tabs[i].classList.contains('active')) continue;
+            }
+            selectTab(tabs[i], false);
+            window.history.replaceState(null, '', '#' + tabs[i].getAttribute('data-section'));
+            return;
         }
     }
 
@@ -105,6 +123,8 @@
                     window.location.href = frame.contentWindow.location.href;
                     return;
                 }
+
+                syncLoadedTab();
 
                 if (page && page.documentElement) {
                     page.documentElement.setAttribute('data-bs-theme', 'dark');
