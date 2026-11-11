@@ -1,73 +1,137 @@
-/* Keep payment pages in the dashboard workspace, including form submissions. */
+/* ==============================================================================
+   FILE: js/ent_dashboard_dpmm.js
+   PURPOSE: Tab switching & iframe navigation for Direct Payments workspace.
+   ============================================================================== */
+
 (function () {
     'use strict';
+
     var frame = document.getElementById('paymentFrame');
     var title = document.getElementById('paymentTitle');
     var loading = document.getElementById('paymentLoading');
     var tabs = document.querySelectorAll('.payment-tab');
-    var themeUrl = new URL('css/payment-content.css', window.location.href).href;
+    var themeUrl = '';
 
+    try {
+        themeUrl = new URL('css/payment-content.css', window.location.href).href;
+    } catch (e) {
+        themeUrl = 'css/payment-content.css';
+    }
+
+    // Function to activate a selected tab
     function selectTab(tab, navigate) {
+        if (!tab) return;
+
+        // 1. Update visual active state on tabs
         for (var i = 0; i < tabs.length; i++) {
-            var active = tabs[i] === tab;
-            tabs[i].classList.toggle('active', active);
-            if (active) tabs[i].setAttribute('aria-current', 'page');
-            else tabs[i].removeAttribute('aria-current');
+            var active = (tabs[i] === tab);
+            if (active) {
+                tabs[i].classList.add('active');
+                tabs[i].setAttribute('aria-current', 'page');
+            } else {
+                tabs[i].classList.remove('active');
+                tabs[i].removeAttribute('aria-current');
+            }
         }
-        title.textContent = tab.textContent;
-        frame.title = tab.textContent;
-        document.title = 'Direct Payments ? ' + tab.textContent;
-        if (navigate) {
-            loading.hidden = false;
-            frame.style.visibility = 'hidden';
-            frame.src = tab.href;
+
+        // 2. Update page title and iframe title
+        var tabText = tab.textContent.trim();
+        if (title) {
+            title.textContent = tabText;
+        }
+        document.title = 'Direct Payments - ' + tabText;
+
+        // 3. Navigate iframe if requested
+        if (frame) {
+            frame.title = tabText;
+            if (navigate) {
+                if (loading) loading.hidden = false;
+                frame.style.visibility = 'hidden';
+                var targetHref = tab.getAttribute('href');
+                if (targetHref) {
+                    frame.src = targetHref;
+                }
+            }
         }
     }
 
+    // Select tab based on URL hash (e.g. #amend, #approvals)
     function fromHash() {
-        var section = window.location.hash.slice(1) || 'add';
+        var hash = window.location.hash.slice(1);
+        if (!hash) return;
         for (var i = 0; i < tabs.length; i++) {
-            if (tabs[i].getAttribute('data-section') === section) {
+            if (tabs[i].getAttribute('data-section') === hash) {
                 selectTab(tabs[i], true);
                 return;
             }
         }
-        selectTab(tabs[0], true);
     }
 
+    // Bind click events on all tabs
     for (var i = 0; i < tabs.length; i++) {
         tabs[i].addEventListener('click', function (event) {
             if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
             event.preventDefault();
-            var hash = '#' + this.getAttribute('data-section');
-            if (window.location.hash === hash) return;
-            window.location.hash = hash;
+
+            // Immediately activate clicked tab
+            selectTab(this, true);
+
+            // Update URL hash cleanly without forcing page jump
+            var section = this.getAttribute('data-section');
+            if (section) {
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', '#' + section);
+                } else {
+                    window.location.hash = section;
+                }
+            }
         });
     }
 
-    frame.addEventListener('load', function () {
-        function reveal() {
-            loading.hidden = true;
-            frame.style.visibility = 'visible';
-        }
-        try {
-            var page = frame.contentDocument;
-            var path = frame.contentWindow.location.pathname;
-            if (/\/(login|dashboard|logout)\.php$/.test(path)) {
-                window.location.href = frame.contentWindow.location.href;
-                return;
+    // Handle iframe loading & inject dark theme styles
+    if (frame) {
+        frame.addEventListener('load', function () {
+            function reveal() {
+                if (loading) loading.hidden = true;
+                frame.style.visibility = 'visible';
             }
-            page.documentElement.setAttribute('data-bs-theme', 'dark');
-            var css = page.createElement('link');
-            css.rel = 'stylesheet';
-            css.href = themeUrl;
-            css.onload = reveal;
-            css.onerror = reveal;
-            page.head.appendChild(css);
-        } catch (error) {
-            reveal();
-        }
-    });
+
+            try {
+                var page = frame.contentDocument;
+                var path = frame.contentWindow.location.pathname;
+
+                // If redirected to login or logout, escape iframe
+                if (/\/(login|dashboard|logout)\.php$/.test(path)) {
+                    window.location.href = frame.contentWindow.location.href;
+                    return;
+                }
+
+                if (page && page.documentElement) {
+                    page.documentElement.setAttribute('data-bs-theme', 'dark');
+                    var css = page.createElement('link');
+                    css.rel = 'stylesheet';
+                    css.href = themeUrl;
+                    css.onload = reveal;
+                    css.onerror = reveal;
+                    if (page.head) {
+                        page.head.appendChild(css);
+                    } else {
+                        reveal();
+                    }
+                } else {
+                    reveal();
+                }
+            } catch (error) {
+                reveal();
+            }
+        });
+    }
+
+    // Listen for hash change in browser history
     window.addEventListener('hashchange', fromHash);
-    if (window.location.hash) fromHash();
+
+    // Initial check on page load
+    if (window.location.hash) {
+        fromHash();
+    }
 })();
