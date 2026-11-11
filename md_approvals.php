@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+require_once dirname(__FILE__) . '/db.php';
 $config_use_sessions = TRUE;
 session_start();
 //md_approvals.php --> md_approvals_fetch_items.php -->md_approvals_save_approval.php

@@ -44,41 +44,6 @@ $te_entddt  = date("Y-%m-%d");
 #echo "The time is " . date("h:i:sa");
 
 // Create empty session values if they are not set yet
-if( !isset($_SESSION["sDatabase"] ))
-{
- $_SESSION["sDatabase"] = "";
-}
-
-if( !isset($_SESSION["sHostname"] ))
-{
- $_SESSION["sHostname"] = "";
-}
-
-if( !isset($_SESSION["sPort"] ))
-{
- $_SESSION["sPort"] = "";
-}
-
-if( !isset($_SESSION["sUsername"] ))
-{
- $_SESSION["sUsername"] = "";
-}
-
-if( !isset($_SESSION["sPassword"] ))
-{
- $_SESSION["sPassword"] = "";
-}
-
-if( !isset($_SESSION["rConn"] ))
-{
- $_SESSION["rConn"] = "";
-}
-
-if( !isset($_SESSION["rDB"] ))
-{
- $_SESSION["rDB"] = "";
-}
-
 if( !isset($_SESSION["sOS"] ))
 {
  $_SESSION["sOS"] = "";
@@ -124,24 +89,10 @@ if( !isset($_SESSION["sImgdir"] ))
 $_SESSION["sImgdir"]=$_SERVER['DOCUMENT_ROOT'].'/strbf/img/';
 
 
-// Database connection details (the last set of values is the one used)
-$_SESSION["sDatabase"] = "ctecomco_strbf";
-$_SESSION["sHostname"] = "localhost";
-$_SESSION["sPort"]     = "3306";
-$_SESSION["sUsername"] = "root";
-$_SESSION["sPassword"] = "mypass";
+// All database settings and the shared connection are provided by db.php.
+require_once dirname(__FILE__) . '/db.php';
 
-
-$te_sDatabase = $_SESSION["sDatabase"];
-$te_sHostname = $_SESSION["sHostname"];
-$te_sPort     = $_SESSION["sPort"];
-$te_sUsername = $_SESSION["sUsername"];
-$te_sPassword = $_SESSION["sPassword"];
-
-$sTable    = "usdmast";
-
-// Connect to the MySQL database
-$connect = new mysqli("$te_sHostname", $te_sUsername, $te_sPassword,$te_sDatabase,$te_sPort) or die("Could not connect : ".mysqli_error($connect));
+$sTable = "usdmast";
 
 
 //print_r($_SESSION);

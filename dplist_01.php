@@ -9,15 +9,8 @@ if (!$_SESSION["validated"])
 }
 
 $o = new HtmlFormsObjects;   
-$te_sDatabase   = $_SESSION["sDatabase"];
-$te_sHostname   = $_SESSION["sHostname"];
-$te_sPort       = $_SESSION["sPort"];
-$te_sUsername   = $_SESSION["sUsername"];
-$te_sPassword   = $_SESSION["sPassword"];
 
-$rConn = mysql_connect("$te_sHostname:$te_sPort", $te_sUsername, $te_sPassword)
-         or die("Could not connect : ".mysql_error());
-$rDB   = mysql_select_db($te_sDatabase,$rConn) or die("Could not select database");
+require_once dirname(__FILE__) . '/db.php';
 
 // --- AJAX HANDLER FOR MODAL DATA ---
 if (isset($_POST['ajax_action']) && $_POST['ajax_action'] == 'get_lines') {
@@ -29,13 +22,13 @@ if (isset($_POST['ajax_action']) && $_POST['ajax_action'] == 'get_lines') {
                   LEFT JOIN g_genmast ON inltran.inlgensno = g_genmast.gensno 
                   WHERE inlinhsno='$inhsno' 
                   ORDER BY inllno ASC";
-    $res_lines = mysql_query($sql_lines);
+    $res_lines = mysqli_query(db_connection(), $sql_lines);
     
     $html = '';
     $total_amt = 0;
     
-    if(mysql_num_rows($res_lines) > 0) {
-        while($row = mysql_fetch_assoc($res_lines)) {
+    if(mysqli_num_rows($res_lines) > 0) {
+        while($row = mysqli_fetch_assoc($res_lines)) {
             $total_amt += $row['inlamt'];
             $disp_gendes = ($row['gendes'] != '') ? $row['gendes'] : '-';
             $disp_inldes = ($row['inldes'] != '') ? $row['inldes'] : '-';
@@ -89,8 +82,8 @@ if(isset($_POST['search'])) {
     }
 
     $sql_list .= " ORDER BY inhsno DESC";
-    $result_list = mysql_query($sql_list) or die("Query Error: " . mysql_error());
-    $record_count = mysql_num_rows($result_list);
+    $result_list = mysqli_query(db_connection(), $sql_list) or die("Query Error: " . mysqli_error(db_connection()));
+    $record_count = mysqli_num_rows($result_list);
 }
 
 ?>
@@ -168,7 +161,7 @@ function loadModalData(inhsno, inhdno) {
                 <label class="form-label fw-bold">Location:</label>
                 <?php
                 $sqlquery = "select locsno, concat(locloc,' - ',locnam) locloc from locmast order by locloc";                            
-                $result = mysql_query($sqlquery);    
+                $result = mysqli_query(db_connection(), $sqlquery);
                 $o->GenerateDropDownList("f_locsno", "$f_locsno", "locsno", "locloc");
                 ?>
             </div>
@@ -176,7 +169,7 @@ function loadModalData(inhsno, inhdno) {
                 <label class="form-label fw-bold">Payment Type:</label>
                 <?php
                 $sqlquery = "select syssno, sysrno from sysmast where sysrtp=36 order by sysrno";                            
-                $result = mysql_query($sqlquery);    
+                $result = mysqli_query(db_connection(), $sqlquery);
                 $o->GenerateDropDownList("f_dptyp", "$f_dptyp", "syssno", "sysrno");
                 ?>
             </div>
@@ -224,7 +217,7 @@ function loadModalData(inhsno, inhdno) {
                     if($result_list !== false) {
                         if($record_count > 0) {
                             $counter = 1;
-                            while($row = mysql_fetch_assoc($result_list)) {
+                            while($row = mysqli_fetch_assoc($result_list)) {
                                 $disp_date = ytod($row['inhddt']);
                                 $disp_sup  = ($row['inhsupnam'] != '') ? $row['inhsupnam'] : '-';
                                 $disp_bank = ($row['bankacc'] != '') ? $row['bankacc'] : '-';
@@ -325,9 +318,9 @@ Class HtmlFormsObjects
     global $result;      
     echo "<select class='form-select form-select-sm border-dark text-dark' id='$HtmlObjectName' name='$HtmlObjectName'> \n";
     echo"<option value=''></option>";
-    if($result && mysql_num_rows($result) > 0) {
-        mysql_data_seek($result,0);
-        while ($rec = mysql_fetch_array($result))
+    if($result && mysqli_num_rows($result) > 0) {
+        mysqli_data_seek($result,0);
+        while ($rec = mysqli_fetch_array($result))
         {
          if ($HtmlObjectDefaultValue == $rec["$DBFieldToValue"])
           echo "<option selected value='".$rec[$DBFieldToValue]."'>$rec[$DBFieldToDescription]</option> \n";

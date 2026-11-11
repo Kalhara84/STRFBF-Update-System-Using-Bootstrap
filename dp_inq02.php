@@ -11,15 +11,8 @@ if (!$_SESSION["validated"])
 $te_cmdopt = 'inq'; 
      
 $o = new HtmlFormsObjects;   
-$te_sDatabase   = $_SESSION["sDatabase"];
-$te_sHostname   = $_SESSION["sHostname"];
-$te_sPort       = $_SESSION["sPort"];
-$te_sUsername   = $_SESSION["sUsername"];
-$te_sPassword   = $_SESSION["sPassword"];
 
-$rConn = mysql_connect("$te_sHostname:$te_sPort", $te_sUsername, $te_sPassword)
-         or die("Could not connect : ".mysql_error());
-$rDB   = mysql_select_db($te_sDatabase,$rConn) or die("Could not select database");
+require_once dirname(__FILE__) . '/db.php';
 
 if (isset($_POST['ajax_action'])) {
     ob_clean();
@@ -81,12 +74,12 @@ if(isset($_POST['ok']))
         $sql_ok .= " AND inhlocsno='$te_inhlocsno'";
     }
 
-    $result_ok = mysql_query($sql_ok) or die("sql error inh ok:<br>".mysql_error());
+    $result_ok = mysqli_query(db_connection(), $sql_ok) or die("sql error inh ok:<br>".mysqli_error(db_connection()));
     
-    if(mysql_num_rows($result_ok)) 
+    if(mysqli_num_rows($result_ok))
     {
         $val_key = "y";
-        $rec = mysql_fetch_array($result_ok);     
+        $rec = mysqli_fetch_array($result_ok);
         
         $te_inhsno          = $rec['inhsno'];
         $te_inhddt          = ytod($rec['inhddt']);
@@ -245,7 +238,7 @@ $(document).ready(function() {
                 <label class='form-label fw-bold'>Location:</label>
                 <?php
                 $sqlquery = "select concat(locloc,' - ',locnam) locloc,locsno from locmast where locsno=1 order by locloc";                            
-                $result   = mysql_query($sqlquery) or die("Sql Error sqlquery:<br>".mysql_error());    
+                $result   = mysqli_query(db_connection(), $sqlquery) or die("Sql Error sqlquery:<br>".mysqli_error(db_connection()));
                 $o->GenerateDropDownListauto("inhlocsno","$te_inhlocsno","locsno","locloc",
                      "this.form.inhlocsnoauto.value=this.options[this.selectedIndex].text;next_dno();", "");
                 ?>
@@ -256,7 +249,7 @@ $(document).ready(function() {
                 <label class='form-label fw-bold'>Payment Type:</label>
                 <?php
                 $sqlquery = "select syssno,sysrno from sysmast where sysrtp=36 order by sysrno";                            
-                $result   = mysql_query($sqlquery) or die("Sql Error sqlquery:<br>".mysql_error());    
+                $result   = mysqli_query(db_connection(), $sqlquery) or die("Sql Error sqlquery:<br>".mysqli_error(db_connection()));
                 $o->GenerateDropDownListauto("inhdptypsno","$te_inhdptypsno","syssno","sysrno",
                      "this.form.inhdptypsnoauto.value=this.options[this.selectedIndex].text;next_dno();", "");
                 ?>
@@ -270,7 +263,7 @@ $(document).ready(function() {
                             where inhlocsno='$te_inhlocsno' and inhtyp='$h_typ'";
                 if ($te_inhdptypsno != "") { $sql_ref .= " and inhdptypsno='$te_inhdptypsno'"; }
                 $sql_ref .= " order by inhsno desc";  
-                $result  = mysql_query($sql_ref) or die("sql error inh select : <br>".mysql_error());   
+                $result  = mysqli_query(db_connection(), $sql_ref) or die("sql error inh select : <br>".mysqli_error(db_connection()));
                 $o->GenerateDropDownList("inhdno","$te_inhdno","inhdno","inhdnox","","");  
                 ?>
             </div>
@@ -360,12 +353,12 @@ $(document).ready(function() {
                                       LEFT JOIN g_genmast ON inltran.inlgensno = g_genmast.gensno 
                                       WHERE inlinhsno='$te_inhsno' 
                                       ORDER BY inllno ASC";
-                        $res_lines = mysql_query($sql_lines) or die("SQL Error Lines: " . mysql_error());
+                        $res_lines = mysqli_query(db_connection(), $sql_lines) or die("SQL Error Lines: " . mysqli_error(db_connection()));
                         
                         $total_amt = 0;
                         
-                        if(mysql_num_rows($res_lines) > 0) {
-                            while($row = mysql_fetch_assoc($res_lines)) {
+                        if(mysqli_num_rows($res_lines) > 0) {
+                            while($row = mysqli_fetch_assoc($res_lines)) {
                                 $total_amt += $row['inlamt'];
                                 $disp_gendes = ($row['gendes'] != '') ? $row['gendes'] : '-';
                                 $disp_inldes = ($row['inldes'] != '') ? $row['inldes'] : '-';
@@ -400,9 +393,9 @@ Class HtmlFormsObjects
   { 
     global $result;
     echo "<select class='form-select form-select-sm' id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'> \n";
-    mysql_data_seek($result,0);
+    mysqli_data_seek($result,0);
     echo "<option value=''>-- Select --</option> \n";
-    while ($rec = mysql_fetch_array($result))
+    while ($rec = mysqli_fetch_array($result))
     {  
      if ($HtmlObjectDefaultValue == $rec["$DBFieldToValue"])
        echo "<option selected value='".$rec[$DBFieldToValue]."'>$rec[$DBFieldToDescription]</option> \n";
@@ -417,9 +410,9 @@ Class HtmlFormsObjects
     global $result;      
     echo "<select class='form-select form-select-sm' id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'> \n";
     echo"<option value=''>-- Select Document --</option>";
-    if($result && mysql_num_rows($result) > 0) {
-        mysql_data_seek($result,0);
-        while ($rec = mysql_fetch_array($result))
+    if($result && mysqli_num_rows($result) > 0) {
+        mysqli_data_seek($result,0);
+        while ($rec = mysqli_fetch_array($result))
         {
          if ($HtmlObjectDefaultValue == $rec["$DBFieldToValue"])
           echo "<option selected value='".$rec[$DBFieldToValue]."'>$rec[$DBFieldToDescription]</option> \n";
@@ -449,9 +442,9 @@ function next_dno($te_inhtyp,$te_inhlocsno,$te_cmdopt,$te_inhdptypsno='')
      $sql_dno .= " and inhdptypsno='$te_inhdptypsno' ";
  }
  $sql_dno .= " order by inhrpritem desc";     
- $result_dno = mysql_query($sql_dno) or die("no Documents ame  <br>".mysql_error());
+ $result_dno = mysqli_query(db_connection(), $sql_dno) or die("no Documents ame  <br>".mysqli_error(db_connection()));
  $te_return  = chr(25).chr(25)."####"; 
- while($fields_dno = mysql_fetch_array($result_dno,MYSQL_BOTH)) {
+ while($fields_dno = mysqli_fetch_array($result_dno,MYSQLI_BOTH)) {
   $te_inhdno    = $fields_dno['inhdno'];
   $te_inhrpritem    = $fields_dno['inhrpritem'];
   $te_return .= "$te_inhdno".""."$te_inhrpritem"."####";    

@@ -14,17 +14,10 @@ else
     $te_cmdopt = $_POST['cmdopt'];
      
 $o = new HtmlFormsObjects;   
-$te_sDatabase   = $_SESSION["sDatabase"];
-$te_sHostname   = $_SESSION["sHostname"];
-$te_sPort       = $_SESSION["sPort"];
-$te_sUsername   = $_SESSION["sUsername"];
-$te_sPassword   = $_SESSION["sPassword"];
 $te_usdcsssno   = $_SESSION["susdcsssno"];
 $te_usdlocsno   = $_SESSION["susdlocsno"];
 
-$rConn = mysql_connect("$te_sHostname:$te_sPort", $te_sUsername, $te_sPassword)
-         or die("Could not connect : ".mysql_error());
-$rDB   = mysql_select_db($te_sDatabase,$rConn) or die("Could not select database");
+require_once dirname(__FILE__) . '/db.php';
 
 $te_fpdf = $_SERVER['DOCUMENT_ROOT'].'tfpdf/fpdf_fpdi/font/';
 if(!defined('FPDF_FONTPATH')) { define('FPDF_FONTPATH', $te_fpdf); }
@@ -76,10 +69,10 @@ function generate_invoice_pdf($te_inhdno)
                  LEFT JOIN sysmast ptyp ON inhdptypsno=ptyp.syssno
                  WHERE inhdno='$te_inhdno' AND inhtyp='30'";
                  
-    $result_pr = mysql_query($query_pr) or die("No header records..!".mysql_error());
+    $result_pr = mysqli_query(db_connection(), $query_pr) or die("No header records..!".mysqli_error(db_connection()));
     
-    if(mysql_num_rows($result_pr)) {
-        $fields_pr = mysql_fetch_array($result_pr);
+    if(mysqli_num_rows($result_pr)) {
+        $fields_pr = mysqli_fetch_array($result_pr);
         
         $pdf->SetFont('Helvetica', '', 10);
         
@@ -111,7 +104,7 @@ function generate_invoice_pdf($te_inhdno)
                       LEFT JOIN g_genmast ON inltran.inlgensno = g_genmast.gensno 
                       WHERE inlinhsno='{$fields_pr['inhsno']}' 
                       ORDER BY inllno ASC";
-        $res_lines = mysql_query($sql_lines);
+        $res_lines = mysqli_query(db_connection(), $sql_lines);
         
         $pdf->SetFont('Helvetica', '', 8);
         
@@ -119,7 +112,7 @@ function generate_invoice_pdf($te_inhdno)
         $row_height = 6;
         $tot_val = 0;
         
-        while($row = mysql_fetch_array($res_lines)) {
+        while($row = mysqli_fetch_array($res_lines)) {
             $acc_code = substr($row['gendes'], 0, 35);
             $desc = substr($row['inldes'], 0, 60);
             
@@ -168,7 +161,7 @@ if (isset($_POST['ajax_action'])) {
 
 // --- PDF GENERATION HANDLER ---
 if (isset($_GET['generate_pdf'])) {
-    $te_inhdno = mysql_real_escape_string($_GET['generate_pdf']);
+    $te_inhdno = mysqli_real_escape_string(db_connection(), $_GET['generate_pdf']);
     generate_invoice_pdf($te_inhdno);
     exit;
 }
@@ -238,9 +231,9 @@ $te_inhdptypsnoauto = '';
 
 if(empty($_POST['inhdptypsno']) && empty($_POST['ok']) && empty($_POST['save'])) {
     $sql_def_ptyp = "SELECT syssno, sysrno FROM sysmast WHERE sysrtp=36 AND sysrno LIKE '%Other%' LIMIT 1";
-    $res_def_ptyp = @mysql_query($sql_def_ptyp);
-    if ($res_def_ptyp && @mysql_num_rows($res_def_ptyp)) {
-        $row_def_ptyp = mysql_fetch_assoc($res_def_ptyp);
+    $res_def_ptyp = @mysqli_query(db_connection(), $sql_def_ptyp);
+    if ($res_def_ptyp && @mysqli_num_rows($res_def_ptyp)) {
+        $row_def_ptyp = mysqli_fetch_assoc($res_def_ptyp);
         $te_inhdptypsno = $row_def_ptyp['syssno'];
         $te_inhdptypsnoauto = $row_def_ptyp['sysrno'];
     }
@@ -256,23 +249,23 @@ $te_usdusd      = $_SESSION["susdusd"];
 $te_ucdnew      = $te_usdusd;
                
 $sql_usd       = "select usdsno from usdmast where usdusd='$te_usdusd'";
-$result_usd    = mysql_query($sql_usd) or die("SQL Error :".mysql_error());
-$fields        = mysql_fetch_array($result_usd);    
+$result_usd    = mysqli_query(db_connection(), $sql_usd) or die("SQL Error :".mysqli_error(db_connection()));
+$fields        = mysqli_fetch_array($result_usd);
 $te_usdsno     = $fields['usdsno']; 
 $js_usdsno     = "var te_usdsno='$te_usdsno';\n";
 
 $h_typ='30';
 
 $fields_colnames_inh = array();$ve_oldval=array();$ve_newval=array();
-$res=mysql_query("SHOW COLUMNS FROM inhtran");
-while ($x = mysql_fetch_assoc($res))
+$res=mysqli_query(db_connection(), "SHOW COLUMNS FROM inhtran");
+while ($x = mysqli_fetch_assoc($res))
 {
     $fields_colnames_inh[] = $x['Field'];
 }
 
 $fields_colnames_inl = array();$ve_oldval=array();$ve_newval=array();
-$res=mysql_query("SHOW COLUMNS FROM inltran");
-while ($x = mysql_fetch_assoc($res))
+$res=mysqli_query(db_connection(), "SHOW COLUMNS FROM inltran");
+while ($x = mysqli_fetch_assoc($res))
 {
     $fields_colnames_inl[] = $x['Field'];
 } 
@@ -300,7 +293,7 @@ if((isset($_POST['save'])) ||(isset($_POST['ok'])) )
 if(isset($_POST['save']))
 {       
     $sql_ = "lock tables inhtran write,inltran write,stkmast write,logmast write,sysmast write,locmast write,ostmast write";
-    $result_ = mysql_query($sql_);
+    $result_ = mysqli_query(db_connection(), $sql_);
     
     $te_inhddt        = dtoy($_POST['inhddt']);
     $te_inhrem        = $_POST['inhrem'];       
@@ -344,7 +337,7 @@ if(isset($_POST['save']))
     $rec_count      = count($a_inlamt);
 
     $sql_query = "select inhsno from inhtran where inhlocsno='$te_inhlocsno' and inhtyp='$h_typ' and inhdno='$te_inhdno' ";
-    $result    = mysql_query($sql_query);
+    $result    = mysqli_query(db_connection(), $sql_query);
     
     if($te_cmdopt=='add')
     {
@@ -358,7 +351,7 @@ if(isset($_POST['save']))
                        '$te_inhsupnam','$te_inhcoqsno','$te_inhcashamt','$te_inhchqamt','$te_inhgensno','$te_inhchqno','$te_inhchqddt','$te_inhourref','$te_inhbank','$te_inhbranch',
                        '$te_inhval','n',
                        '$te_ucdnew','$te_entddt','$te_enttime')"; 
-        $result_h = mysql_query($sql_h) or die("Could not Insert to inh</BR>".MYSQL_ERROR()); 
+        $result_h = mysqli_query(db_connection(), $sql_h) or die("Could not Insert to inh</BR>".mysqli_error(db_connection()));
         echo "<div class='alert alert-success text-center py-1 mb-1'>Inserted Document No: '$te_inhdno'</div>";
         
         for($i=0;$i<$rec_count;$i++)
@@ -369,7 +362,7 @@ if(isset($_POST['save']))
                 $sql_ah = "INSERT INTO inltran(inllno,inlinhsno,inlgensno,inldes,inlamt,inlucdnew,inlentddt,inlenttime)
                              VALUES ('$te_inllno','$te_inhsno','$a_inlgensno[$i]','$a_inldes[$i]','$a_inlamt[$i]',
                              '$te_ucdnew','$te_entddt','$te_enttime')";        
-                $result_al = mysql_query($sql_ah) or die("MYSQL Error ins inl insert : <br>".mysql_error());
+                $result_al = mysqli_query(db_connection(), $sql_ah) or die("MYSQL Error ins inl insert : <br>".mysqli_error(db_connection()));
             }
         }       
   
@@ -391,19 +384,19 @@ if(isset($_POST['save']))
   
     if($te_cmdopt=='ame')                   
     {
-        if(!mysql_num_rows($result)) 
+        if(!mysqli_num_rows($result))
         {
             echo "<div class='alert alert-danger text-center py-1 mb-1'>Document No: '$te_inhdnoauto' not found..!</div>";
         }
         else
         {
-            $fields     = mysql_fetch_array($result, MYSQL_BOTH);
+            $fields     = mysqli_fetch_array($result, MYSQLI_BOTH);
             $te_inhsno  = $fields['inhsno'];
             
             $sql_query = "select * from inhtran where inhsno='$te_inhsno' ";
-            $result_inh  = mysql_query($sql_query);
-            $fields_inh  = mysql_fetch_array($result_inh); 
-            if(mysql_num_rows($result_inh)) 
+            $result_inh  = mysqli_query(db_connection(), $sql_query);
+            $fields_inh  = mysqli_fetch_array($result_inh);
+            if(mysqli_num_rows($result_inh))
             {
                 $ve_oldval=array();$ve_newval=array();   
                 foreach ($fields_colnames_inh as $f)
@@ -430,11 +423,11 @@ if(isset($_POST['save']))
                                               inhametime    ='$te_enttime'
                                               WHERE 
                                               inhsno ='$te_inhsno'";
-            $result_bh = mysql_query($sql_ame_h) or die("Could not Update header:<br>".mysql_error());
+            $result_bh = mysqli_query(db_connection(), $sql_ame_h) or die("Could not Update header:<br>".mysqli_error(db_connection()));
             
             $sql_query ="select * from inhtran where inhsno='$te_inhsno'";
-            $result_inh = mysql_query($sql_query);
-            $fields_inh = mysql_fetch_array($result_inh); 
+            $result_inh = mysqli_query(db_connection(), $sql_query);
+            $fields_inh = mysqli_fetch_array($result_inh);
             foreach ($fields_colnames_inh as $f)
             {
                 $ve_newval[$f]=$fields_inh[$f];
@@ -457,13 +450,13 @@ if(isset($_POST['save']))
                                values
                               ('$te_logucd','$te_logentddt','$te_logenttime','b_issenter.php','BBGRN ADD',
                                'Amend BBGRN  $te_inhdno::$log','$te_inhsno','$h_typ','$te_inhdno')";
-                $result =mysql_query($sql_log1);  
+                $result =mysqli_query(db_connection(), $sql_log1);
             }
             
             echo "<div class='alert alert-success text-center py-1 mb-1'>Header updated - $te_inhdno</div>";
             
             $sql_  = "update inltran set inldelflg='Y' where inlinhsno='$te_inhsno'";
-            $result_    = mysql_query($sql_) or die("Could not update del flg inl ame"); 
+            $result_    = mysqli_query(db_connection(), $sql_) or die("Could not update del flg inl ame");
             
             for($i=0;$i<$rec_count;$i++)
             { 
@@ -471,9 +464,9 @@ if(isset($_POST['save']))
 
                 $te_inlsno=$a_inlsno[$i];
                 $sql_query = "select * from inltran where inlsno='$te_inlsno' ";
-                $result_inl_l  = mysql_query($sql_query);
-                $fields_inl_l  = mysql_fetch_array($result_inl_l); 
-                if(mysql_num_rows($result_inl_l)) 
+                $result_inl_l  = mysqli_query(db_connection(), $sql_query);
+                $fields_inl_l  = mysqli_fetch_array($result_inl_l);
+                if(mysqli_num_rows($result_inl_l))
                 {
                     $ve_oldval=array();$ve_newval=array();   
                     foreach ($fields_colnames_inl as $f)
@@ -483,10 +476,10 @@ if(isset($_POST['save']))
                 }
                     
                 $sql_inl = "select inlsno,inllno from inltran where inlsno='$te_inlsno'";
-                $result_inl = mysql_query($sql_inl);
-                if(mysql_num_rows($result_inl))
+                $result_inl = mysqli_query(db_connection(), $sql_inl);
+                if(mysqli_num_rows($result_inl))
                 {
-                    $fields_inl= mysql_fetch_array($result_inl,MYSQL_BOTH);
+                    $fields_inl= mysqli_fetch_array($result_inl,MYSQLI_BOTH);
                     $te_inllno  = $fields_inl['inllno'];
                
                     $sql_sqlgrl     = "Update inltran set
@@ -498,11 +491,11 @@ if(isset($_POST['save']))
                         inlametime   ='$te_enttime',
                         inldelflg    =''
                         where inlsno ='$te_inlsno'";
-                    $result = mysql_query($sql_sqlgrl) or die("Could not Update inl<br>".mysql_error());
+                    $result = mysqli_query(db_connection(), $sql_sqlgrl) or die("Could not Update inl<br>".mysqli_error(db_connection()));
                     
                     $sql_query ="select * from inltran where inlsno='$te_inlsno'";
-                    $result_inl_l = mysql_query($sql_query);
-                    $fields_inl_l = mysql_fetch_array($result_inl_l); 
+                    $result_inl_l = mysqli_query(db_connection(), $sql_query);
+                    $fields_inl_l = mysqli_fetch_array($result_inl_l);
                     foreach ($fields_colnames_inl as $f)
                     {
                         $ve_newval[$f]=$fields_inl_l[$f];
@@ -525,16 +518,16 @@ if(isset($_POST['save']))
                                      values
                                      ('$te_logucd','$te_logentddt','$te_logenttime','b_issenter.php','AMEBBGRN',
                                       'AMEBBGRN $te_inhdno::$log','$te_inhsno','$h_typ','$te_inhdno','$te_inlsno','$te_inllno')";
-                        $result =mysql_query($sql_log1);  
+                        $result =mysqli_query(db_connection(), $sql_log1);
                     }      
                 }
                 else
                 {   
                     $sql_ ="select inllno from inltran where inlinhsno='$te_inhsno' order by inllno desc";
-                    $result_ = mysql_query($sql_);      
-                    if(mysql_num_rows($result_))
+                    $result_ = mysqli_query(db_connection(), $sql_);
+                    if(mysqli_num_rows($result_))
                     {
-                        $fields_ = mysql_fetch_array($result_); 
+                        $fields_ = mysqli_fetch_array($result_);
                         $te_inllno  = $fields_['inllno']+1;
                     }     
                     else
@@ -548,16 +541,16 @@ if(isset($_POST['save']))
                                inlucdnew,inlentddt,inlenttime)
                         VALUES ('$te_inllno','$te_inhsno','$a_inlgensno[$i]','$a_inldes[$i]','$a_inlamt[$i]',
                                  '$te_ucdnew','$te_entddt','$te_enttime')";
-                    $result_al = mysql_query($sql_ah) or die("error insert inltran MYSQL Error ins inl ame2 : <br>".mysql_error()); 
+                    $result_al = mysqli_query(db_connection(), $sql_ah) or die("error insert inltran MYSQL Error ins inl ame2 : <br>".mysqli_error(db_connection()));
                 }
             } 
             $sql_  = "delete from inltran where inlinhsno='$te_inhsno' and inldelflg='Y'";
-            $result_    = mysql_query($sql_) or die("Could not delete del flg inl "); 
+            $result_    = mysqli_query(db_connection(), $sql_) or die("Could not delete del flg inl ");
 
             $sql_log = "insert into logmast(logucd,logddt,logtime,logprgnam,logaction,logdes)
                          values ('$te_usdusd','$te_entddt','$te_enttime','b_issenter.php','$te_cmdopt',
                          'Amend Line  AMEISSUETRANSFER \" $te_inlsno\"')";
-            mysql_query($sql_log);
+            mysqli_query(db_connection(), $sql_log);
             
             // Trigger PDF printing
             echo "<form id='pdfForm_ame' method='GET' action='" . $_SERVER['PHP_SELF'] . "' target='_blank' style='display:none;'>
@@ -576,53 +569,53 @@ if(isset($_POST['save']))
     {
         // Total calculated using the new inlamt field
         $sql_ = "select sum(inlamt) inhval from inltran where inlinhsno='$te_inhsno'";
-        $result_ = mysql_query($sql_) or die("SQL Error sql_ inlsum  : <br>".mysql_error());
+        $result_ = mysqli_query(db_connection(), $sql_) or die("SQL Error sql_ inlsum  : <br>".mysqli_error(db_connection()));
         $te_inhval=0;
-        if(mysql_num_rows($result_))
+        if(mysqli_num_rows($result_))
         {
-            $fields_= mysql_fetch_array($result_,MYSQL_BOTH);
+            $fields_= mysqli_fetch_array($result_,MYSQLI_BOTH);
             $te_inhval = $fields_['inhval'];
         }
         
         $sql_upd_inh    = "UPDATE inhtran SET inhval ='$te_inhval' WHERE inhsno ='$te_inhsno'";
-        $result_upd_inh = mysql_query($sql_upd_inh) or die("Could not Update header:<br>".mysql_error());
+        $result_upd_inh = mysqli_query(db_connection(), $sql_upd_inh) or die("Could not Update header:<br>".mysqli_error(db_connection()));
     }
  
     if($te_cmdopt=='del')
     {       
-        if(!mysql_num_rows($result)) 
+        if(!mysqli_num_rows($result))
         {
             echo "<div class='alert alert-danger text-center py-1 mb-1'>Document No: '$te_inhdnoauto' not found..!</div>";
         }
         else
         {
-            $fields     = mysql_fetch_array($result, MYSQL_BOTH);
+            $fields     = mysqli_fetch_array($result, MYSQLI_BOTH);
             $te_inhsno  = $fields['inhsno'];
             
             $query_inl = "select inlsno from inltran where inlinhsno='$te_inhsno' order by inllno";
-            $result_inl = mysql_query($query_inl) or die("sql error inl:<br>".mysql_error());
+            $result_inl = mysqli_query(db_connection(), $query_inl) or die("sql error inl:<br>".mysqli_error(db_connection()));
             $ok_flg='y';
 
             if($ok_flg=='y')
             {              
                 $sql_del = "DELETE FROM inltran where inlinhsno='$te_inhsno'";
-                $result  = mysql_query($sql_del) or die("Could not delete cnl");
+                $result  = mysqli_query(db_connection(), $sql_del) or die("Could not delete cnl");
                 echo "<div class='alert alert-success text-center py-1 mb-1'>' $te_inhdnoauto ' line deleted</div>";
                              
                 $sql_dell = "DELETE FROM inhtran where inhsno='$te_inhsno'";
-                $result  = mysql_query($sql_dell) or die("Could not delete cnh");
+                $result  = mysqli_query(db_connection(), $sql_dell) or die("Could not delete cnh");
                 echo "<div class='alert alert-success text-center py-1 mb-1'> ' $te_inhdnoauto ' header deleted</div>";  
                 
                 $sql_log = "insert into logmast(logucd,logddt,logtime,logprgnam,logaction,logdes)
                              values ('$te_usdusd','$te_entddt','$te_enttime','b_issenter.php','DELBBISSUE',
                              'DELBBISSUE \" $te_inhdno\"')";
-                mysql_query($sql_log);
+                mysqli_query(db_connection(), $sql_log);
             }
         }
     } 
  
     $sql_ = "unlock tables";
-    $result_ = mysql_query($sql_);
+    $result_ = mysqli_query(db_connection(), $sql_);
 }
 
 ?>
@@ -639,8 +632,8 @@ if(isset($_POST['ok']))
                       left join sysmast coq on inhcoqsno=coq.syssno 
                       
                       where  inhdno='$te_inhdno' and inhtyp='$h_typ'";
-    $result_ok = mysql_query($sql_ok) or die("sql error inh ok:<br>".mysql_error());
-    if(mysql_num_rows($result_ok)) 
+    $result_ok = mysqli_query(db_connection(), $sql_ok) or die("sql error inh ok:<br>".mysqli_error(db_connection()));
+    if(mysqli_num_rows($result_ok))
     {
         if ($te_cmdopt=='add')   
         { 
@@ -654,7 +647,7 @@ if(isset($_POST['ok']))
             {
                 $te_ro="readonly";
             }  
-            $rec                = mysql_fetch_array($result_ok);     
+            $rec                = mysqli_fetch_array($result_ok);
             $te_inhsno          = $rec['inhsno'];
             $te_inhddt          = ytod($rec['inhddt']);
             $te_inhrem          = $rec['inhrem'];
@@ -676,9 +669,9 @@ if(isset($_POST['ok']))
                            from inltran inl
                            left join g_genmast gen on inl.inlgensno = gen.gensno
                            WHERE inl.inlinhsno='$te_inhsno' order by inl.inlsno";        
-            $result_display = mysql_query($sql_display) or die("sql error inl ok :<br>".mysql_error());
+            $result_display = mysqli_query(db_connection(), $sql_display) or die("sql error inl ok :<br>".mysqli_error(db_connection()));
             $i=0;
-            while ($fields = mysql_fetch_array($result_display,MYSQL_BOTH))
+            while ($fields = mysqli_fetch_array($result_display,MYSQLI_BOTH))
             {      
                 $te_inlgensno      = trim($fields['inlgensno']);
                 $te_inlgensno_text = trim($fields['gendes']); 
@@ -1129,7 +1122,7 @@ $(document).ready(function() {
                     <label class='form-label fw-bold'>Payment Type:</label>
                     <?php
                     $sqlquery = "select syssno,sysrno from sysmast where sysrtp=36 order by sysrno";                            
-                    $result   = mysql_query($sqlquery) or die("Sql Error sqlquery:<br>".mysql_error());    
+                    $result   = mysqli_query(db_connection(), $sqlquery) or die("Sql Error sqlquery:<br>".mysqli_error(db_connection()));
                     $o->GenerateDropDownListauto("inhdptypsno","$te_inhdptypsno","syssno","sysrno",
                          "this.form.inhdptypsnoauto.value=this.options[this.selectedIndex].text;next_dno();hide_div();",
                          "return enter(document.fn.inhdno)");
@@ -1152,7 +1145,7 @@ $(document).ready(function() {
                             $sql_ref .= " and inhdptypsno='$te_inhdptypsno'";
                         }
                         $sql_ref .= " and (inhcanucd='' or inhcanucd is null) order by inhsno desc";  
-                        $result  = mysql_query($sql_ref) or die("sql error inh select : <br>".mysql_error());   
+                        $result  = mysqli_query(db_connection(), $sql_ref) or die("sql error inh select : <br>".mysqli_error(db_connection()));
                         $o->GenerateDropDownList("inhdno","$te_inhdno","inhdno","inhdnox","","");  
                     }
                     ?>
@@ -1188,7 +1181,7 @@ $(document).ready(function() {
                     <label class='form-label fw-bold'>Payment Method:</label>
                     <?php   
                       $sqlquery= "select syssno,concat(sysrno,' - ',sysdes) syssys from sysmast where sysrtp=33 ORDER BY sysrno";            
-                      $result  = mysql_query($sqlquery) or die("no records");
+                      $result  = mysqli_query(db_connection(), $sqlquery) or die("no records");
                       $o->GenerateDropDownListauto("inhcoqsno","$te_inhcoqsno","syssno","syssys",
                       "this.form.inhcoqsnoauto.value=this.options[this.selectedIndex].text;",
                       "return enter(document.fn.inhbank);");  
@@ -1210,7 +1203,7 @@ $(document).ready(function() {
                     <label class='form-label fw-bold'>Bank Account:</label>
                     <?php
                     $sqlquery = "select gensno, gendes from g_genmast where genbnkprefix!='' order by gendes"; 
-                    $result   = mysql_query($sqlquery) or die("Sql Error sqlquery gen:<br>".mysql_error());     
+                    $result   = mysqli_query(db_connection(), $sqlquery) or die("Sql Error sqlquery gen:<br>".mysqli_error(db_connection()));
                     $o->GenerateDropDownListauto("inhgensno","$te_inhgensno","gensno","gendes",
                          "this.form.inhgensnoauto.value=this.options[this.selectedIndex].text;",
                          "return enter(document.fn.inhchqno)");
@@ -1307,9 +1300,9 @@ $(document).ready(function() {
             <tbody id="lineItemsList">
             <?php
             $sql_query= "select inhsno,inhdno,inhddt,inhdlvddt,inhquotationno,inhmrqreqby,locloc,inhsupnam from inhtran left join locmast on inhlocsno=locsno /*left join supmast on inhsupsno=supsno*/ where inhtyp='01' and inhgrntyp='' order by inhdno desc limit 10";
-            $result = mysql_query($sql_query)or die("Error:<br>".mysql_error());
+            $result = mysqli_query(db_connection(), $sql_query)or die("Error:<br>".mysqli_error(db_connection()));
             $x=0;
-            while ($fields = mysql_fetch_array($result, MYSQL_BOTH))
+            while ($fields = mysqli_fetch_array($result, MYSQLI_BOTH))
             {
              $te_inhsno    =  $fields['inhsno'];
              $te_inhdno    =  $fields['inhdno'];
@@ -1340,12 +1333,12 @@ function next_auto_increment($tablename)
 {
  $next_increment = 0;
  $qShowStatus    = "SHOW TABLE STATUS LIKE '$tablename'";
- $qShowStatusResult = mysql_query($qShowStatus) or die ( "Query failed: " . mysql_error() . "  " . qShowStatus );
- while ($row = mysql_fetch_assoc($qShowStatusResult)) 
+ $qShowStatusResult = mysqli_query(db_connection(), $qShowStatus) or die ( "Query failed: " . mysqli_error(db_connection()) . "  " . qShowStatus );
+ while ($row = mysqli_fetch_assoc($qShowStatusResult))
  {
   $next_increment = $row['Auto_increment'];
  }
- mysql_free_result($qShowStatusResult);  
+ mysqli_free_result($qShowStatusResult);
  return $next_increment;
 }
             
@@ -1355,9 +1348,9 @@ Class HtmlFormsObjects
   { 
     global $result;
     echo "<select class='form-select form-select-sm' id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'> \n";
-    mysql_data_seek($result,0);
+    mysqli_data_seek($result,0);
     echo "<option></option> \n";
-    while ($rec = mysql_fetch_array($result))
+    while ($rec = mysqli_fetch_array($result))
     {  
      if ($HtmlObjectDefaultValue == $rec["$DBFieldToValue"])
        echo "<option selected value='".$rec[$DBFieldToValue]."'>$rec[$DBFieldToDescription]</option> \n";
@@ -1372,8 +1365,8 @@ Class HtmlFormsObjects
     global $result;      
     echo "<select class='form-select form-select-sm' id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'> \n";
     echo"<option></option>";
-    mysql_data_seek($result,0);
-    while ($rec = mysql_fetch_array($result))
+    mysqli_data_seek($result,0);
+    while ($rec = mysqli_fetch_array($result))
     {
      if ($HtmlObjectDefaultValue == $rec["$DBFieldToValue"])
       echo "<option selected value='".$rec[$DBFieldToValue]."'>$rec[$DBFieldToDescription]</option> \n";
@@ -1389,10 +1382,10 @@ function next_dno($te_inhtyp,$te_inhlocsno,$te_cmdopt,$te_inhdptypsno='')
  if($te_inhtyp=="") { return ""; }   
  $te_facprefix='';   
  $sql_fac = "SELECT locloc FROM locmast where locsno='1'";
- $result_fac = mysql_query($sql_fac) or die('SQL Error sql_facm');
+ $result_fac = mysqli_query(db_connection(), $sql_fac) or die('SQL Error sql_facm');
     
- if(mysql_num_rows($result_fac)) {
-  $fields_fac = mysql_fetch_array($result_fac, MYSQL_BOTH);
+ if(mysqli_num_rows($result_fac)) {
+  $fields_fac = mysqli_fetch_array($result_fac, MYSQLI_BOTH);
   $te_locloc = $fields_fac['locloc'];
  }
  $te_locloc=trim($te_locloc);
@@ -1401,12 +1394,12 @@ function next_dno($te_inhtyp,$te_inhlocsno,$te_cmdopt,$te_inhdptypsno='')
  if($te_cmdopt=='add')
  {  
   $sql_dno  = "SELECT inhdno FROM inhtran where inhlocsno='$te_inhlocsno' and inhtyp='$te_inhtyp' order by inhdno desc limit 1";
-  $result_dno = mysql_query($sql_dno) or die('SQL Error sql_dno');
+  $result_dno = mysqli_query(db_connection(), $sql_dno) or die('SQL Error sql_dno');
   $sql_dno  = "SELECT inhdno FROM inhtran where 1 and inhtyp='$te_inhtyp' order by inhdno desc limit 1";
-  $result_dno = mysql_query($sql_dno) or die('SQL Error sql_dno');
+  $result_dno = mysqli_query(db_connection(), $sql_dno) or die('SQL Error sql_dno');
     
-  if(mysql_num_rows($result_dno)) {
-   $fields_dno = mysql_fetch_array($result_dno, MYSQL_BOTH);
+  if(mysqli_num_rows($result_dno)) {
+   $fields_dno = mysqli_fetch_array($result_dno, MYSQLI_BOTH);
    $te_inhdno1 = substr($fields_dno['inhdno'],$pfxlen);
    $te_inhdno1 = intval($te_inhdno1) + 1;
    $te_inhdno1 = str_pad($te_inhdno1,'7','0',STR_PAD_LEFT);  
@@ -1425,9 +1418,9 @@ function next_dno($te_inhtyp,$te_inhlocsno,$te_cmdopt,$te_inhdptypsno='')
       $sql_dno .= " and inhdptypsno='$te_inhdptypsno' ";
   }
   $sql_dno .= " order by inhrpritem desc";     
-  $result_dno = mysql_query($sql_dno) or die("no Documents ame  <br>".mysql_error());
+  $result_dno = mysqli_query(db_connection(), $sql_dno) or die("no Documents ame  <br>".mysqli_error(db_connection()));
   $te_return  = chr(25).chr(25)."####"; 
-  while($fields_dno = mysql_fetch_array($result_dno,MYSQL_BOTH)) {
+  while($fields_dno = mysqli_fetch_array($result_dno,MYSQLI_BOTH)) {
    $te_inhdno    = $fields_dno['inhdno'];
    $te_inhrpritem    = $fields_dno['inhrpritem'];
    $te_return .= "$te_inhdno"."  "."$te_inhrpritem"."####";    
@@ -1439,9 +1432,9 @@ function next_dno($te_inhtyp,$te_inhlocsno,$te_cmdopt,$te_inhdptypsno='')
 function load_gen()
 {
  $sql = "select gensno, gendes from g_genmast where genctl!='1005' order by gendes";
- $result = mysql_query($sql) or die('SQL Error load_gen');
+ $result = mysqli_query(db_connection(), $sql) or die('SQL Error load_gen');
  $te_return = '  ####'; 
- while($fields = mysql_fetch_array($result, MYSQL_BOTH)) {
+ while($fields = mysqli_fetch_array($result, MYSQLI_BOTH)) {
   $te_gensno = $fields['gensno'];
   $te_gendes = $fields['gendes'];
   $te_return .= "$te_gensno" . "  " . "$te_gendes" . "####";
