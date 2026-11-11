@@ -1,0 +1,340 @@
+/* ==============================================================================
+   FILE: css/dashboard.css
+   PURPOSE: Styles for the Dashboard layout and Sidebar (matching Image 2).
+
+   CSS & ASSET SOURCES NOTE:
+   - Base framework: "css/bootstrap.min.css" (Bootstrap v3.3.7 - stored locally)
+   - Layout & Theme: Custom stylesheet written for strbf_pasan project
+   - Color Palette (Derived directly from Image 2):
+       * Sidebar background: #687fd9 (Periwinkle slate-blue)
+       * Active menu outline: #202b46 (Dark navy border pill)
+       * Main area background: #eaedf1 (Soft light-gray)
+       * Top action buttons: #24b8d9 (Vibrant cyan/teal)
+       * Content card: #ffffff with subtle 1px border & dividers #e5e8ec
+   - No external CDNs or online fonts required; works 100% offline.
+   ============================================================================== */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #eaedf1;
+    color: #333333;
+}
+
+/* Main Dashboard Wrapper */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ==============================================================================
+   SIDEBAR STYLING (Matching Image 2)
+   ============================================================================== */
+.sidebar {
+    width: 270px;
+    min-width: 270px;
+    background-color: #687fd9;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: margin-left 0.28s ease, width 0.28s ease;
+    z-index: 100;
+}
+
+/* Collapsed sidebar state */
+.sidebar.collapsed {
+    margin-left: -270px;
+}
+
+.sidebar-header {
+    padding: 16px 20px 10px 20px;
+}
+
+/* Top Back / Toggle Arrow */
+.sidebar-back-btn {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 14px;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar-back-btn:hover {
+    opacity: 1;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Company Title & User */
+.sidebar-title {
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+.sidebar-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Section Title: "Breeder System" */
+.sidebar-section-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+    padding: 24px 20px 12px 20px;
+    margin: 0;
+}
+
+/* Navigation List */
+.sidebar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0 14px;
+}
+
+.sidebar-nav-item {
+    margin-bottom: 6px;
+}
+
+/* Menu Header Links */
+.sidebar-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.sidebar-nav-link:hover,
+.sidebar-nav-link:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Active / Selected Menu Item with Dark Rounded Border (Like (1)Master Files in Image 2) */
+.sidebar-nav-item.active > .sidebar-nav-link,
+.sidebar-nav-link.active-pill {
+    border: 2px solid #202b46;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #ffffff;
+}
+
+.sidebar-chevron {
+    font-size: 11px;
+    transition: transform 0.2s ease;
+}
+
+/* Fallback icons if font is loading */
+.glyphicon-chevron-down:empty:before {
+    content: "\e114";
+}
+.glyphicon-chevron-up:empty:before {
+    content: "\e113";
+}
+
+/* Submenu Styling */
+.sidebar-submenu {
+    list-style: none;
+    margin: 4px 0 10px 0;
+    padding: 0 0 0 12px;
+}
+
+.sidebar-submenu-item {
+    margin: 5px 0;
+}
+
+.sidebar-submenu-link {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12.5px;
+    padding: 4px 10px;
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+    border-radius: 4px;
+}
+
+.sidebar-submenu-link:hover,
+.sidebar-submenu-link:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(2px);
+}
+
+/* Sidebar Footer (Change Password & Logout) */
+.sidebar-footer {
+    padding: 20px 20px 24px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-footer-link {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 6px 0;
+    text-decoration: none;
+    opacity: 0.92;
+    transition: opacity 0.15s ease;
+}
+
+.sidebar-footer-link:hover,
+.sidebar-footer-link:focus {
+    color: #ffffff;
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* ==============================================================================
+   MAIN CONTENT AREA (Matching Image 2)
+   ============================================================================== */
+.main-content {
+    flex: 1;
+    padding: 16px 24px;
+    background-color: #eaedf1;
+    overflow-y: auto;
+}
+
+/* Top Toolbar Action Buttons */
+.toolbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.btn-cyan {
+    background-color: #24b8d9;
+    border: none;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    cursor: pointer;
+}
+
+.btn-cyan:hover,
+.btn-cyan:focus {
+    background-color: #1fa4c3;
+    color: #ffffff;
+    text-decoration: none;
+    outline: none;
+}
+
+.btn-cyan:active {
+    transform: translateY(1px);
+}
+
+/* Cyan Toggle Sidebar Icon (List/indent icon) */
+.icon-bars {
+    display: inline-block;
+    width: 13px;
+    height: 10px;
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    position: relative;
+}
+
+.icon-bars:after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 13px;
+    height: 2px;
+    background-color: #ffffff;
+}
+
+/* Center Content Card (Image 2 specification) */
+.dashboard-card {
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    padding: 30px 40px;
+    max-width: 960px;
+    min-height: 480px;
+}
+
+/* Information Rows with Horizontal Dividers */
+.info-row {
+    padding: 18px 0;
+    border-bottom: 1px solid #e5e8ec;
+    display: flex;
+    align-items: baseline;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    width: 220px;
+    min-width: 180px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2b3345;
+    margin: 0;
+}
+
+.info-value {
+    flex: 1;
+    font-size: 15px;
+    color: #4b5563;
+    margin: 0;
+}
+
+.info-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #e8f4fd;
+    color: #0d6efd;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    }
+    .info-row {
+        flex-direction: column;
+        gap: 6px;
+    }
+    .info-label {
+        width: 100%;
+    }
+}
