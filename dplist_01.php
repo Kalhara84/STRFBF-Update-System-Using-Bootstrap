@@ -98,14 +98,14 @@ if(isset($_POST['search'])) {
 <html>
 <head>
 <title>Direct Payment List</title>
-<link href="bootstrap/5.3.1/bootstrap.min.css" rel="stylesheet">
-<link href="bootstrap/5.3.1/select2/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="bootstrap/5.3.1/select2/select2-bootstrap-5-theme.min.css" />
+<link href="css/bootstrap5.min.css" rel="stylesheet">
+<link href="css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
 
 <script src="jquery/jquery-1.11.3.min.js"></script>
-<script src="bootstrap/5.3.1/bootstrap.min.js"></script>
-<script src="bootstrap/5.3.1/select2/select2.min.js"></script>
-<script language="JavaScript" src="calendar2.js"></script>
+<script src="js/bootstrap5.bundle.min.js"></script>
+<script src="js/select2.min.js"></script>
+<script language="JavaScript" src="js/calendar2.js"></script>
 
 <style>
     /* Full height layout without main window scrolling, Strict Black/White/Blue Theme */
@@ -184,14 +184,14 @@ function loadModalData(inhsno, inhdno) {
                 <label class="form-label fw-bold">From Date:</label>
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" name="f_from_date" id="f_from_date" value="<?php echo $f_from_date; ?>" autocomplete="off">
-                    <button class="btn btn-outline-dark" type="button" onclick="cal1.popup();"><img src="cal.gif" width="14" height="14"></button>
+                    <button class="btn btn-outline-dark" type="button" onclick="cal1.popup();"><img src="img/cal.gif" width="14" height="14"></button>
                 </div>
             </div>
             <div class="col-md-2">
                 <label class="form-label fw-bold">To Date:</label>
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" name="f_to_date" id="f_to_date" value="<?php echo $f_to_date; ?>" autocomplete="off">
-                    <button class="btn btn-outline-dark" type="button" onclick="cal2.popup();"><img src="cal.gif" width="14" height="14"></button>
+                    <button class="btn btn-outline-dark" type="button" onclick="cal2.popup();"><img src="img/cal.gif" width="14" height="14"></button>
                 </div>
             </div>
             <div class="col-md-2">

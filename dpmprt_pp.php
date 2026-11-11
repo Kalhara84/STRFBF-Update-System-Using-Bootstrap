@@ -230,13 +230,13 @@ if(isset($_POST['ok']))
 <html>
 <head>
 <title>Direct Payment Print</title>
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap5.min.css" rel="stylesheet">
 <link href="css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
 
 <script src="jquery/jquery-1.11.3.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="jsc:\wamp\www\strbf\dp_inq02.php/select2.min.js"></script>
+<script src="js/bootstrap5.bundle.min.js"></script>
+<script src="js/select2.min.js"></script>
 
 <style>
     body {

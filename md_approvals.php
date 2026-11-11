@@ -15,8 +15,9 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Order EA Screen</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap5.min.css">
     <style>
         body {
             background: #eef4ff;
@@ -114,18 +115,18 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
     <div id="itemsTable"></div>
 
     <!-- ▬▬▬▬▬▬▬▬ MODAL ▬▬▬▬▬▬▬▬ -->
-    <div id="historyModal" class="modal fade" role="dialog">
+    <div id="historyModal" class="modal fade" tabindex="-1" aria-labelledby="historyTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg">
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Past Purchase History</h4>
+                    <h4 class="modal-title" id="historyTitle">Past Purchase History</h4>
                 </div>
                 <div class="modal-body" id="historyBody">
                     Loading...
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
 
@@ -133,7 +134,7 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
     </div>
 
     <script src="jquery/3.2.0/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap5.bundle.min.js"></script>
 
     <script>
         $("input[name=type]").click(function () {
@@ -152,7 +153,7 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
 
         function showHistory(item_id) {
             $("#historyBody").html("Loading...");
-            $("#historyModal").modal("show");
+            bootstrap.Modal.getOrCreateInstance(document.getElementById("historyModal")).show();
 
             $.post("md_approvals_fetch_history.php", { id: item_id, modopt: 'poh' }, function (data) {
                 $("#historyBody").html(data);
@@ -161,7 +162,7 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
 
         function showDpLines(item_id) {
             $("#historyBody").html("Loading...");
-            $("#historyModal").modal("show");
+            bootstrap.Modal.getOrCreateInstance(document.getElementById("historyModal")).show();
 
             $.post("md_approvals_fetch_history.php", { id: item_id, modopt: 'dph' }, function (data) {
                 $("#historyBody").html(data);

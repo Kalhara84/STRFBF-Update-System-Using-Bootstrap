@@ -3,7 +3,7 @@
    PURPOSE: Custom styles for the Login page (matching Image 1).
 
    CSS & ASSET SOURCES NOTE:
-   - Base framework: css/bootstrap.min.css (Bootstrap v3.3.7 - stored locally)
+   - Base framework: css/bootstrap5.min.css (Bootstrap v5.3.3 - stored locally)
    - Background image: img/login-back2.jpg (Fluid wavy 3D light-blue background)
    - Right illustration: img/login-side.jpg (Right card background with laptop chart)
    - No external CDN is used so that the page functions 100% offline.
@@ -95,7 +95,7 @@ html, body {
 }
 
 /* Input Fields - Underline style */
-.login-form .form-group {
+.login-form .login-field {
     margin-bottom: 22px;
     position: relative;
 }
@@ -202,16 +202,16 @@ html, body {
 }
 
 .login-form p.bg-danger {
-    background-color: #ffebee;
+    background-color: #ffebee !important;
     color: #c62828;
 }
 
 .login-form p.bg-warning {
-    background-color: #fff8e1;
+    background-color: #fff8e1 !important;
     color: #f57f17;
 }
 
-#login .form-group label.error {
+#login .login-field label.error {
     color: #ffcdd2;
     font-size: 12px;
     font-weight: 400;

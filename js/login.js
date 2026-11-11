@@ -4,14 +4,12 @@
   * Copyright Sam Deering 2012
   * Licence: http://www.jquery4u.com/license/
   */
-(function($,W,D)
-{
+(function ($, W, D) {
     var JQUERY4U = {};
 
     JQUERY4U.UTIL =
     {
-        setupFormValidation: function()
-        {
+        setupFormValidation: function () {
             // Rules: user name and password must be filled
             $("#login").validate({
                 rules: {
@@ -31,7 +29,7 @@
                     },
                 },
                 // When all fields are valid, send the form
-                submitHandler: function(form) {
+                submitHandler: function (form) {
                     form.submit();
                 }
             });
@@ -39,7 +37,7 @@
     }
 
     // When the page is ready, start the form validation
-    $(D).ready(function($) {
+    $(D).ready(function ($) {
         JQUERY4U.UTIL.setupFormValidation();
     });
 

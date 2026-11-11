@@ -5,10 +5,10 @@
    MATCHING DESIGN: Image 1 (RBF Login screen)
 
    ASSET & CODE SOURCES / DOCUMENTATION NOTE:
-   - CSS Framework: "css/bootstrap.min.css" (Bootstrap v3.3.7, stored locally in css/ folder)
+   - CSS Framework: "css/bootstrap5.min.css" (Bootstrap v5.3.3, stored locally in css/ folder)
    - Custom Styling: "css/custom.css" (Custom stylesheet matching Image 1 layout & colors)
    - Preloader CSS: "css/preloader.css" (Local preloader styling)
-   - jQuery Library: "js/jquery-1.10.2.min.js" (Local jQuery library)
+   - jQuery Library: "jquery/jquery-1.10.2.min.js" (Local jQuery library)
    - Form Validation: "js/jquery.validate.min.js" (Client-side validation plugin)
    - Login Handler Script: "js/login.js" (Local form validation rules & handlers)
    - Images:
@@ -21,18 +21,18 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 // The session starts below; logout.php clears it when the user signs out.
 
-$config_use_sessions = TRUE;  
+$config_use_sessions = TRUE;
 // Start a new session
 session_start();
 
-$te_entddt  = date("Y-%m-%d"); 
+$te_entddt  = date("Y-%m-%d");
 
 if( !isset($_SESSION["error"] ))
 {
  $_SESSION["error"] = "";
 }
 
-$te_error="";  
+$te_error="";
 
 // Set the time zone and get today's date and time
 date_default_timezone_set('Asia/Colombo');
@@ -84,7 +84,7 @@ if( !isset($_SESSION["sOS"] ))
  $_SESSION["sOS"] = "";
 }
 
-$_SESSION["sLG"] = "";  
+$_SESSION["sLG"] = "";
 
 if( !isset($_SESSION["sback"] ))
 {
@@ -144,11 +144,11 @@ $sTable    = "usdmast";
 $connect = new mysqli("$te_sHostname", $te_sUsername, $te_sPassword,$te_sDatabase,$te_sPort) or die("Could not connect : ".mysqli_error($connect));
 
 
-//print_r($_SESSION); 
+//print_r($_SESSION);
 // User is not logged in until the checks below pass
 if(!isset($_SESSION["validated"] ))
 {
- $_SESSION["validated"];       
+ $_SESSION["validated"];
 }
 $_SESSION["validated"] = false;
 
@@ -168,28 +168,28 @@ $_SESSION["scomnam"]='Ravi Breeder Farm';
 
 // Run this block when the Sign In button is pressed
 if(isset($_POST['submit']))
-{      		
- #$te_usdusd = ucwords($_POST['usdusd']); 
- 
+{
+ #$te_usdusd = ucwords($_POST['usdusd']);
+
  // Read the user name and password typed in the form
- $te_usdusd = $_POST['usdusd']; 
- $te_usdpwd = $_POST['usdpwd']; 
- 
+ $te_usdusd = $_POST['usdusd'];
+ $te_usdpwd = $_POST['usdpwd'];
+
  if($te_usdusd!='' and $te_usdpwd!='')
- { 
+ {
   // Find the user in the database
-  $sql_query = "SELECT * FROM usdmast WHERE usdusd = '$te_usdusd' and usdactflg!='n' ";    	
-  //$sql_query = "SELECT * FROM usdmast WHERE  BINARY  usdusd = BINARY '$te_usdusd' "; (Case Sesitivity CHECK)  
-  //echo "$sql_query"; 
+  $sql_query = "SELECT * FROM usdmast WHERE usdusd = '$te_usdusd' and usdactflg!='n' ";
+  //$sql_query = "SELECT * FROM usdmast WHERE  BINARY  usdusd = BINARY '$te_usdusd' "; (Case Sesitivity CHECK)
+  //echo "$sql_query";
   $result = mysqli_query($connect,$sql_query) or die("Error".mysqli_error($connect));
-  if(mysqli_num_rows($result)) 
+  if(mysqli_num_rows($result))
   {
   }
   else
   {
-   $error[] = "<p class='bg-warning'><i class='glyphicon glyphicon-remove-circle red' ></i><b>Invalid User Code</b></p>";
+   $error[] = "<p class='bg-warning'><span aria-hidden='true'>&#10005; </span><b>Invalid User Code</b></p>";
   }
-   
+
   $fields = mysqli_fetch_array($result, MYSQLI_BOTH);
   $te_usdsno  = $fields['usdsno'];
   $te_usdstkrolyn  = $fields['usdstkrolyn'];
@@ -199,9 +199,9 @@ if(isset($_POST['submit']))
   }
   else
   {
-   $error[] = "<p class='bg-danger'><i class='glyphicon glyphicon-remove-circle red' ></i><b>Invalid Password</b></p>";
+   $error[] = "<p class='bg-danger'><span aria-hidden='true'>&#10005; </span><b>Invalid Password</b></p>";
   }
-  
+
   // If there is any error, login is not allowed; otherwise save the user details in the session
   if(isset($error))
   {
@@ -214,63 +214,63 @@ if(isset($_POST['submit']))
    {
     $_SESSION["susdusd"];
    }
-   $_SESSION["susdusd"]=$fields['usdusd']; 
-   $_SESSION["susdstkrolyn"]=$fields['usdstkrolyn']; 
-   
+   $_SESSION["susdusd"]=$fields['usdusd'];
+   $_SESSION["susdstkrolyn"]=$fields['usdstkrolyn'];
+
    if( !isset($_SESSION["susdsno"]))
    {
     $_SESSION["susdsno"];
    }
-   $_SESSION["susdsno"]=$fields['usdsno']; 
-       
+   $_SESSION["susdsno"]=$fields['usdsno'];
+
    if( !isset($_SESSION["susdnam"]))
    {
     $_SESSION["susdnam"];
    }
-   $_SESSION["susdnam"]=$fields['usdnam'];  
-    
+   $_SESSION["susdnam"]=$fields['usdnam'];
+
    if( !isset($_SESSION["susdadmin"]))
    {
     $_SESSION["susdadmin"];
-   }  
-   $_SESSION["susdadmin"]=$fields['usdadmin'];  
-   
+   }
+   $_SESSION["susdadmin"]=$fields['usdadmin'];
+
    if( !isset($_SESSION["susdlocsno"]))
    {
     $_SESSION["susdlocsno"];
    }
    $_SESSION["susdlocsno"]=$fields['usdlocsno'];
-   
+
    if( !isset($_SESSION["susdcomsno"]))
    {
     $_SESSION["susdcomsno"];
    }
    $_SESSION["susdcomsno"]=$fields['usdcomsno'];
-   
+
    if( !isset($_SESSION["susdcomcom"]))
    {
     $_SESSION["susdcomcom"];
    }
    $_SESSION["susdcomcom"]=$fields['usdcomcom'];
-   
+
    if( !isset($_SESSION["susdcomnam"]))
    {
     $_SESSION["susdcomnam"];
    }
    $_SESSION["susdcomnam"]=$fields['usdcomnam'];
-   
+
    if( !isset($_SESSION["susdcatsno"]))
    {
     $_SESSION["susdcatsno"];
    }
    $_SESSION["susdcatsno"]=$fields['usdcatsno'];
-     
+
    if( !isset($_SESSION["susddes"] ))
    {
     $_SESSION["susddes"];
    }
    $_SESSION["susddes"]=$fields['usddes'];
-        
+
    if( !isset($_SESSION["susduno"]))
    {
     $_SESSION["susduno"];
@@ -280,10 +280,10 @@ if(isset($_POST['submit']))
    {
     $_SESSION["susdspadmin"];
    }
-   $_SESSION["susdspadmin"]=$fields['usdspadmin']; 
-   
-   
-   
+   $_SESSION["susdspadmin"]=$fields['usdspadmin'];
+
+
+
    // Check how old the password is (it expires after 30 days)
    $te_usdpwdddt = $fields['usdpwdddt'];
 
@@ -296,23 +296,23 @@ if(isset($_POST['submit']))
     }
     $te_noofdays = 0;
    }
-   else if (!empty($te_usdpwdddt) && $te_usdpwdddt > "0000-00-00") 
+   else if (!empty($te_usdpwdddt) && $te_usdpwdddt > "0000-00-00")
    {
 	$query_      ="SELECT DATEDIFF('$te_entddt','$te_usdpwdddt') as datedif";
     $result_     = mysqli_query($connect,$query_);
     $fields_     = mysqli_fetch_array($result_, MYSQLI_BOTH);
-    $te_noofdays = $fields_['datedif'];  
+    $te_noofdays = $fields_['datedif'];
    }
-   else 
+   else
    {
     $te_noofdays = 999;
    }
 
    if($te_noofdays > 30)
    {
-    $_SESSION["validated"] = false;         
-    $error[] = "<p class='bg-danger'><i class='glyphicon glyphicon-remove-circle red' ></i><b>Password Expired; Please Contact Administrator</b></p>";     
-   } 
+    $_SESSION["validated"] = false;
+    $error[] = "<p class='bg-danger'><span aria-hidden='true'>&#10005; </span><b>Password Expired; Please Contact Administrator</b></p>";
+   }
    // Only complete login when all checks, including password expiry, pass.
    $_SESSION["validated"] = !isset($error);
    if ($_SESSION["validated"]) {
@@ -322,30 +322,30 @@ if(isset($_POST['submit']))
        $temp_pwd_date = (!empty($te_usdpwdddt)) ? $te_usdpwdddt : date('Y-m-d');
        $_SESSION['dashboard_password_expiry'] = date('Y-m-d', strtotime($temp_pwd_date . ' +30 days'));
    }
-   
+
    // Remember Me: save the user name and password in cookies
    if(isset($_POST['usdspcopyadd']))
    {
     $te_usdspcopyaddopt="checked";
-    setcookie('rememberusd', $te_usdusd,mktime (0, 0, 0, 12, 31, 2019));     
-    setcookie('rememberpwd', $te_usdpwd,mktime (0, 0, 0, 12, 31, 2019));     
+    setcookie('rememberusd', $te_usdusd,mktime (0, 0, 0, 12, 31, 2019));
+    setcookie('rememberpwd', $te_usdpwd,mktime (0, 0, 0, 12, 31, 2019));
    }
    else
    {
 	$te_usdspcopyaddopt="";
    }
-   
+
    // Send the user to the correct page by user category
-   $te_usdcatsno =$fields['usdcatsno']*1;  
-   
+   $te_usdcatsno =$fields['usdcatsno']*1;
+
    if($_SESSION['validated'] && ($te_usdcatsno == '34' or $te_usdcatsno == '0' or $te_usdcatsno == '')) //normal user
-   { 	  	    
+   {
     $_SESSION["alert"]=true;
-    
+
     $te_logucd=$_SESSION["susdusd"];
     $te_logentddt=date("Y-%m-%d");
     $te_logenttime=date('H:i:s');
-    
+
     // Save a login record in the log table
     if($te_logucd!='2000')
     {
@@ -355,9 +355,9 @@ if(isset($_POST['submit']))
                ('$te_logucd','$te_logentddt','$te_logenttime','login.php','LOGIN',
                 'LOGIN')";
      //echo "$sql_log<br>";
-     $result =mysqli_query($connect,$sql_log) or die("sql error logmast<br>".mysqli_error($connect) );  
+     $result =mysqli_query($connect,$sql_log) or die("sql error logmast<br>".mysqli_error($connect) );
     }
-    
+
     header('Location: dashboard.php');
     exit;
    }
@@ -375,10 +375,10 @@ else
 
  // Page opened normally: fill the form from the saved cookies
  $te_ = $_COOKIE['rememberusd'];
- $te_usdusd=$te_;	 
- 
+ $te_usdusd=$te_;
+
  $te_ = $_COOKIE['rememberpwd'];
- $te_usdpwd=$te_;	 
+ $te_usdpwd=$te_;
 }
 
 // On the local machine (127.0.0.1) fill the login details automatically
@@ -392,13 +392,13 @@ if($te_remoteip=='127.0.0.1')
 {
  $te_usdusd='2000';
  $te_usdpwd='2000 rbf';
- 
+
 }
 
 
 $te_ = $_SERVER['DOCUMENT_ROOT'];
 //echo "$te_ <br>";
-?> 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -408,26 +408,19 @@ $te_ = $_SERVER['DOCUMENT_ROOT'];
 <title>Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <!-- All CSS and JS files are loaded from the local css and js folders, so the page works offline -->
-<?php
-$te=$_SERVER['DOCUMENT_ROOT'].'/ffmal/css/bootstrap.min.css';
-//echo "$te<br>";
-//echo "<link type='text/css' href='$te' rel='stylesheet'>";
-?>
+
 
 <!-- Bootstrap styles -->
-<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap5.min.css" />
 
 <!-- Our own styles -->
 <link rel="stylesheet" href="css/custom.css?v=2">
 <link rel="stylesheet" href="css/preloader.css">
 
-<!-- Help old Internet Explorer (below IE 9) to understand HTML5 tags -->
-<!--[if lt IE 9]>
-	<script src="js/html5shiv.min.js"></script>
-<![endif]-->
+
 
 <!-- jQuery, common script and form validation plugin -->
-<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
 <!-- Login page design is in css/custom.css -->
@@ -457,7 +450,7 @@ $te=$_SERVER['DOCUMENT_ROOT'].'/ffmal/css/bootstrap.min.css';
   <div class="row login-row">
 
     <!-- LEFT SIDE: logo and login form -->
-    <div class="col-sm-6 login-left">
+    <div class="col-md-6 login-left">
 
       <!-- Logo and title matching Image 1 -->
       <div class="login-brand">
@@ -482,34 +475,34 @@ $te=$_SERVER['DOCUMENT_ROOT'].'/ffmal/css/bootstrap.min.css';
         ?>
 
         <!-- User name field -->
-        <div class="form-group">
+        <div class="login-field">
           <input type="text" id="fake_user" style="display:none">       <!-- to stop autocomplete -->
           <input type="password" id="fake_pass" style="display:none">   <!-- to stop autocomplete -->
-          <input type="text" name="usdusd" id="usdusd" autocomplete="off" value="<?= $te_usdusd?>" class="form-control input-lg" placeholder="User Name">
-          <small class="hidden" id="user_small">User Name Required</small>
+          <input type="text" name="usdusd" id="usdusd" autocomplete="off" value="<?= $te_usdusd?>" class="form-control form-control-lg" placeholder="User Name">
+          <small class="d-none" id="user_small">User Name Required</small>
         </div>
 
         <!-- Password field -->
-        <div class="form-group">
-          <input type="password" name="usdpwd" value="<?= $te_usdpwd?>" class="form-control input-lg" placeholder="Password">
-          <small class="hidden" id="user_pass">Password Required</small>
+        <div class="login-field">
+          <input type="password" name="usdpwd" value="<?= $te_usdpwd?>" class="form-control form-control-lg" placeholder="Password">
+          <small class="d-none" id="user_pass">Password Required</small>
         </div>
 
         <!-- Remember Me check box and Forgot password link -->
-        <div class="form-group login-options">
+        <div class="login-field login-options">
           <label class="login-remember"><input type="checkbox" name="usdspcopyadd" id="usdspcopyadd" <?= $te_usdspcopyaddopt ?> value=""> Remember Me</label>
           <a href='usdforgot.php' class="login-forgot">Forgot Password..?</a>
         </div>
 
         <!-- Sign In button -->
-        <div class="form-group">
-          <input type="submit" name="submit" value="SIGN IN" class="btn btn-block btn-lg btn-login" tabindex="5">
+        <div class="login-field">
+          <input type="submit" name="submit" value="SIGN IN" class="btn w-100 btn-lg btn-login" tabindex="5">
         </div>
       </form>
     </div>
 
     <!-- RIGHT SIDE: picture (img/login-side.jpg) and tip text. Hidden on small phones -->
-    <div class="col-sm-6 login-right hidden-xs">
+    <div class="col-md-6 login-right d-none d-md-flex">
       <div class="login-tip">
         <small>PRO TIP #1</small>
         <h2>Speed up<br>data entry</h2>
@@ -521,7 +514,7 @@ $te=$_SERVER['DOCUMENT_ROOT'].'/ffmal/css/bootstrap.min.css';
 </div>
 
 <!-- Local js/login.js contains the existing jQuery validation rules.
-     It uses js/jquery-1.10.2.min.js and js/jquery.validate.min.js already included above. -->
+     It uses jquery/jquery-1.10.2.min.js and js/jquery.validate.min.js already included above. -->
 <script src="js/login.js"></script>
 
 <!-- All scripts are loaded in the head from the local js folder -->

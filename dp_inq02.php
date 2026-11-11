@@ -117,13 +117,13 @@ if(isset($_POST['ok']))
 <html>
 <head>
 <title>Direct Payment Inquiry</title>
-<link href="bootstrap/5.3.1/bootstrap.min.css" rel="stylesheet">
-<link href="bootstrap/5.3.1/select2/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="bootstrap/5.3.1/select2/select2-bootstrap-5-theme.min.css" />
+<link href="css/bootstrap5.min.css" rel="stylesheet">
+<link href="css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
 
 <script src="jquery/jquery-1.11.3.min.js"></script>
-<script src="bootstrap/5.3.1/bootstrap.min.js"></script>
-<script src="bootstrap/5.3.1/select2/select2.min.js"></script>
+<script src="js/bootstrap5.bundle.min.js"></script>
+<script src="js/select2.min.js"></script>
 
 <style>
     /* Compact, non-scrolling full height layout */

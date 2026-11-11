@@ -5,7 +5,7 @@
 
    CSS & ASSET SOURCES NOTE:
    - Styling: "css/dashboard.css" (.sidebar, .sidebar-header, .sidebar-nav, etc.)
-   - Base Framework: "css/bootstrap.min.css" (Local Bootstrap v3.3.7)
+   - Base Framework: "css/bootstrap5.min.css" (Local Bootstrap v5.3.3)
    - Logo Asset: "img/lgf-Logo.png" (Displayed above company title)
    - JavaScript Behavior: "js/dashboard.js" (Handles submenu expand/collapse)
    - Red Logout Button: Styled via .sidebar-logout-btn in css/dashboard.css
@@ -43,7 +43,7 @@ $loggedUser = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
             <li class="sidebar-nav-item has-submenu active">
                 <a href="javascript:void(0);" class="sidebar-nav-link">
                     <span>(1) Operations</span>
-                    <span class="sidebar-chevron glyphicon glyphicon-chevron-down"></span>
+                    <span class="sidebar-chevron" aria-hidden="true"></span>
                 </a>
                 <ul class="sidebar-submenu" style="display: block;">
                     <li class="sidebar-submenu-item">
@@ -66,7 +66,7 @@ $loggedUser = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
             <li class="sidebar-nav-item has-submenu">
                 <a href="javascript:void(0);" class="sidebar-nav-link">
                     <span>(3) Master Files</span>
-                    <span class="sidebar-chevron glyphicon glyphicon-chevron-right"></span>
+                    <span class="sidebar-chevron" aria-hidden="true"></span>
                 </a>
                 <ul class="sidebar-submenu" style="display: none;">
                     <li class="sidebar-submenu-item">

@@ -3,7 +3,7 @@
    PURPOSE: Dark Navy / Midnight Blue theme for the Dashboard.
 
    CSS & ASSET SOURCES NOTE:
-   - Base framework: "css/bootstrap.min.css" (Bootstrap v3.3.7 - stored locally)
+   - Base framework: "css/bootstrap5.min.css" (Bootstrap v5.3.3 - stored locally)
    - Layout & Theme: Custom dark theme matching user reference specifications
    - Color Palette:
        * Main page background: #0b1020 (Deep Midnight Navy)
@@ -286,7 +286,6 @@ html, body {
     display: inline-block;
     width: 20px;
     height: 20px;
-}
     vertical-align: middle;
 }
 
@@ -406,3 +405,8 @@ html, body {
         width: 100%;
     }
 }
+
+/* Chevron icons independent of the removed Bootstrap 3 icon font. */
+.sidebar-chevron { width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); }
+.sidebar-nav-item.active > .sidebar-nav-link .sidebar-chevron { transform: rotate(45deg); }
+.main-content, .info-value { min-width: 0; overflow-wrap: anywhere; }

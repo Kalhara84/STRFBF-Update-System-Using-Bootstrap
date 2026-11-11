@@ -4,18 +4,18 @@
    PURPOSE: Main Dashboard page (Dark Navy Midnight Theme).
 
    CSS & JAVASCRIPT ASSET SOURCES / DOCUMENTATION NOTE:
-   - "css/bootstrap.min.css":
-       Bootstrap v3.3.7 CSS framework stored locally in the "css" directory.
+   - "css/bootstrap5.min.css":
+       Bootstrap v5.3.3 CSS framework stored locally in the "css" directory.
    - "css/dashboard.css":
        Custom dark stylesheet located in the "css" directory.
        Provides the dark midnight blue palette (#0b1020, #0e1428, #131a2e),
        spacious expanded card, royal blue icon button (#4f6fe6), and red logout button.
    - "img/lgf-Logo.png":
        Company logo displayed in sidebar and card header.
-   - "js/jquery-1.10.2.min.js":
+   - "jquery/jquery-1.10.2.min.js":
        Local jQuery library located in the "js" directory.
-   - "js/bootstrap.min.js":
-       Bootstrap v3.3.7 JavaScript located in the "js" directory.
+   - "js/bootstrap5.bundle.min.js":
+       Bootstrap v5.3.3 JavaScript located in the "js" directory.
    - "js/dashboard.js":
        Interactive script handling the "Toggle Sidebar" button and submenu collapse/expand.
    - "sidebar.php":
@@ -29,7 +29,7 @@ if (!isset($_SESSION)) {
 
 // User details for dashboard display
 $companyName    = !empty($_SESSION['scomnam']) && $_SESSION['scomnam'] !== 'Ravi Breeder Farm'
-    ? $_SESSION['scomnam'] 
+    ? $_SESSION['scomnam']
     : 'Ramico International (Pvt) Ltd';
 $userName       = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
 $userEmail      = !empty($_SESSION['dashboard_email']) ? $_SESSION['dashboard_email'] : 'rumeshdezoysa@gmail.com';
@@ -45,16 +45,13 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Dashboard - <?= htmlspecialchars($companyName) ?></title>
 
-    <!-- 1. Bootstrap v3.3.7 CSS (Local file from css/ folder) -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <!-- 1. Bootstrap v5.3.3 CSS (Local file from css/ folder) -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap5.min.css">
 
     <!-- 2. Custom Dark Dashboard Stylesheet (Local file from css/ folder) -->
     <link rel="stylesheet" type="text/css" href="css/dashboard.css">
 
-    <!-- HTML5 shim for backward compatibility with IE8 -->
-    <!--[if lt IE 9]>
-        <script src="js/html5shiv.min.js"></script>
-    <![endif]-->
+
 </head>
 <body>
 
@@ -124,10 +121,10 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
 </div>
 
 <!-- 1. jQuery v1.10.2 (Local file from js/ folder) -->
-<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.10.2.min.js"></script>
 
-<!-- 2. Bootstrap v3.3.7 JS (Local file from js/ folder) -->
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<!-- 2. Bootstrap v5.3.3 JS (Local file from js/ folder) -->
+<script type="text/javascript" src="js/bootstrap5.bundle.min.js"></script>
 
 <!-- 3. Dashboard Interactive Script (Local file from js/ folder) -->
 <script type="text/javascript" src="js/dashboard.js"></script>

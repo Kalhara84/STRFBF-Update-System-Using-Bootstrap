@@ -22,6 +22,8 @@ echo "$te_usdusd<br>";
 ?>
 <HTML>
   <HEAD>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/bootstrap5.min.css">
     <TITLE>Direct Payments Request</TITLE> 
      <link href="css/ent.css" rel="stylesheet" type="text/css"  />
      <script src="js/ent_dashboard_dpmm.js"></script>

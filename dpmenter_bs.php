@@ -721,12 +721,12 @@ if(isset($_POST['ok']))
 <html>
 <head>
 <title></title>
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap5.min.css" rel="stylesheet">
 <link href="css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
 
 <script src="jquery/jquery-1.11.3.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap5.bundle.min.js"></script>
 <script src="js/select2.min.js"></script>
 
 <script language="JavaScript" src="js/formvalidation.js"></script>
@@ -1172,7 +1172,7 @@ $(document).ready(function() {
                     <label class='form-label fw-bold'>Date:</label>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" name="inhddt" id="inhddt" value="<?php echo $te_inhddt?>" onkeypress="return enter(document.fn.inhsupnam);">
-                        <button class="btn btn-outline-secondary" type="button" onclick="cal.popup();"><img src="cal.gif" width="16" height="16" alt="Pick Date"></button>
+                        <button class="btn btn-outline-secondary" type="button" onclick="cal.popup();"><img src="img/cal.gif" width="16" height="16" alt="Pick Date"></button>
                     </div>
                     <SCRIPT LANGUAGE="JavaScript">var cal = new calendar2(document.fn.inhddt); cal.year_scroll = true; cal.time_comp = false;</SCRIPT>       
                 </div>
@@ -1228,7 +1228,7 @@ $(document).ready(function() {
                     <label class='form-label fw-bold'>Dated Date (Chq):</label>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" name="inhchqddt" id="inhchqddt" value="<?php echo $te_inhchqddt?>" onkeypress="return enter(document.fn.inhourref);">
-                        <button class="btn btn-outline-secondary" type="button" onclick="cal2.popup();"><img src="cal.gif" width="16" height="16" alt="Pick Date"></button>
+                        <button class="btn btn-outline-secondary" type="button" onclick="cal2.popup();"><img src="img/cal.gif" width="16" height="16" alt="Pick Date"></button>
                     </div>
                     <SCRIPT LANGUAGE="JavaScript">var cal2 = new calendar2(document.fn.inhchqddt); cal2.year_scroll = true; cal2.time_comp = false;</SCRIPT>       
                 </div>
