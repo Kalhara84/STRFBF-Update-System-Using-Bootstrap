@@ -4,7 +4,7 @@ $config_use_sessions = TRUE;
 session_start();
 //md_approvals.php --> md_approvals_fetch_items.php -->md_approvals_save_approval.php
 $te_usdusd=$_SESSION["susdusd"];
-echo "$te_usdusd<br>";
+
 if($te_usdusd!='2000' and $te_usdusd!='ravi')
 {
  //return;	
@@ -51,12 +51,7 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
 
 <body>
 
-    <div class="header-section">
-        <h2 style="color: #333; font-weight: bold;">Order EA</h2>
-        <button class="btn btn-success btn-sm" onclick="window.location.href='dashboard.php'">MENU</button>
-    </div>
-
-    <div class="container">
+<div class="container">
         <div class="row">
             <div class="col-md-12 ">
                 <!-- ▬▬▬▬▬▬▬▬ 16 RADIO BUTTONS ▬▬▬▬▬▬▬▬ -->
@@ -137,19 +132,42 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
     <script src="js/bootstrap5.bundle.min.js"></script>
 
     <script>
-        $("input[name=type]").click(function () {
-            var selected = $(this).val();
-            //alert(selected);
-            $("#itemsTable").show().html("<b>Loading...</b>");
-
-            // Clear session saved IDs when changing type
-            $.post("md_approvals_clear_session.php", {}, function() {
-                $.post("md_approvals_fetch_items.php", { type: selected }, function (data) {
-                    $("#itemsTable").html(data);
-                    $("#saveBtn").show();
-                });
-            });
+        var itemsRequest = null;
+        var loadVersion = 0;
+        function requestError(xhr) {
+            if (xhr.status === 401) return 'Your session has expired. Please sign in again.';
+            if (xhr.status === 422) return 'This category is not implemented in the available application files.';
+            return 'Unable to load data. Please try again. (HTTP ' + xhr.status + ')';
+        }
+        function loadItems(selected, clearSaved) {
+            var version = ++loadVersion;
+            if (itemsRequest) itemsRequest.abort();
+            $("#saveBtn").hide();
+            $("#itemsTable").show().html('<p role="status">Loading...</p>');
+            function failed(xhr, status) {
+                if (status === 'abort' || version !== loadVersion) return;
+                $("#itemsTable").empty().append($('<div class="alert alert-danger" role="alert">').text(requestError(xhr)));
+            }
+            function fetchItems() {
+                if (version !== loadVersion) return;
+                itemsRequest = $.post('md_approvals_fetch_items.php', {type: selected})
+                    .done(function(data) {
+                        if (version !== loadVersion) return;
+                        $("#itemsTable").html(data);
+                        $("#saveBtn").toggle($("#itemsTable .approveBox").length > 0);
+                    }).fail(failed);
+            }
+            if (clearSaved) {
+                itemsRequest = $.post('md_approvals_clear_session.php', {}).done(fetchItems).fail(failed);
+            } else fetchItems();
+        }
+        $("input[name=type]").on('change', function () {
+            loadItems($(this).val(), true);
         });
+
+        var initialType = $("input[name=type][value=direct_payment]");
+        initialType.prop('checked', true);
+        loadItems('direct_payment', true);
 
         function showHistory(item_id) {
             $("#historyBody").html("Loading...");
@@ -157,6 +175,8 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
 
             $.post("md_approvals_fetch_history.php", { id: item_id, modopt: 'poh' }, function (data) {
                 $("#historyBody").html(data);
+            }).fail(function(xhr) {
+                $("#historyBody").text(requestError(xhr));
             });
         }
 
@@ -166,6 +186,8 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
 
             $.post("md_approvals_fetch_history.php", { id: item_id, modopt: 'dph' }, function (data) {
                 $("#historyBody").html(data);
+            }).fail(function(xhr) {
+                $("#historyBody").text(requestError(xhr));
             });
         }
 
@@ -178,18 +200,15 @@ if($te_usdusd!='2000' and $te_usdusd!='ravi')
             });
             //alert(ticks);
             
-            $.post("md_approvals_save_approval.php", { ids: ticks }, function (response) {
-                // alert(response);
-                
-                // Re-fetch the table with the same type (session contains saved IDs)
-                var selected = $("input[name=type]:checked").val();
-                if (selected) {
-                    $("#itemsTable").html("<b>Loading...</b>");
-                    $.post("md_approvals_fetch_items.php", { type: selected }, function (data) {
-                        $("#itemsTable").html(data);
-                    });
-                }
-            });
+            if (!ticks.length) return;
+            var selected = $("input[name=type]:checked").val();
+            $("#saveBtn").prop('disabled', true);
+            $.post("md_approvals_save_approval.php", {ids: ticks})
+                .done(function() {
+                    if ($("input[name=type]:checked").val() === selected) loadItems(selected, false);
+                }).fail(function(xhr) {
+                    alert('Unable to save approvals. Please try again. (HTTP ' + xhr.status + ')');
+                }).always(function() { $("#saveBtn").prop('disabled', false); });
         });
 
         $("#searchBox").on("blur", function () {

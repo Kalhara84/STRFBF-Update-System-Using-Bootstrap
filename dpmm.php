@@ -51,7 +51,7 @@ $paymentPages = array(
             </nav>
             <div class="payment-frame-wrap">
                 <p id="paymentLoading" class="payment-loading" role="status" hidden>Loading payment page?</p>
-                <iframe id="paymentFrame" name="paymentFrame" title="Add Payment Request" src="dpmenter_bs.php?cmdopt=add"></iframe>
+                <iframe id="paymentFrame" data-theme-version="<?php echo filemtime(dirname(__FILE__) . '/css/payment-content.css'); ?>" name="paymentFrame" title="Add Payment Request" src="dpmenter_bs.php?cmdopt=add"></iframe>
             </div>
         </section>
     </main>

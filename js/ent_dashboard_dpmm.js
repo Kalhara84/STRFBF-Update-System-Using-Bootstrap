@@ -18,6 +18,8 @@
         themeUrl = 'css/payment-content.css';
     }
 
+    themeUrl += '?v=' + encodeURIComponent(frame.getAttribute('data-theme-version') || 'light-1');
+
     // Function to activate a selected tab
     function selectTab(tab, navigate) {
         if (!tab) return;
@@ -106,7 +108,7 @@
         });
     }
 
-    // Handle iframe loading & inject dark theme styles
+    // Handle iframe loading & apply readable light content styles
     if (frame) {
         frame.addEventListener('load', function () {
             function reveal() {
@@ -127,7 +129,7 @@
                 syncLoadedTab();
 
                 if (page && page.documentElement) {
-                    page.documentElement.setAttribute('data-bs-theme', 'dark');
+                    page.documentElement.setAttribute('data-bs-theme', 'light');
                     var css = page.createElement('link');
                     css.rel = 'stylesheet';
                     css.href = themeUrl;
