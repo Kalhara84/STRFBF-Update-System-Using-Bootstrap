@@ -1,236 +1,272 @@
-/* ==========================================================
-   Login page layout. Dark dashboard theme overrides are at the end.
-   Uses Bootstrap grid classes (row, col-sm-6, form-control, btn)
-   ========================================================== */
+/* ==============================================================================
+   FILE: css/custom.css
+   PURPOSE: Custom styles for the Login page (matching Image 1).
 
-/* ---------- Colours (change here to change the theme) ---------- */
-/* Dark blue  : #0b3a8d   Main blue : #1565c0
-   Light blue : #4da3ff   White     : #ffffff */
+   CSS & ASSET SOURCES NOTE:
+   - Base framework: css/bootstrap.min.css (Bootstrap v3.3.7 - stored locally)
+   - Background image: img/login-back2.jpg (Fluid wavy 3D light-blue background)
+   - Right illustration: img/login-side.jpg (Right card background with laptop chart)
+   - No external CDN is used so that the page functions 100% offline.
+   ============================================================================== */
 
-/* ---------- Page ---------- */
 html, body {
     height: 100%;
     margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 .login-body {
-    background-color: #e6eefa;         /* light blue shown if the image is missing */
-    /* Background image (img/login-back2.jpg) with a light blue layer on top */
-    background-image: linear-gradient(rgba(230, 238, 250, 0.25), rgba(230, 238, 250, 0.25)),
-                      url("../img/login-back2.jpg");
+    background-color: #e5effa;
+    background-image: url("../img/login-back2.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    display: flex;                     /* centre the card on the screen */
+    display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
     padding: 20px;
 }
 
-/* Preloader (not used now) */
-.preloader {
-}
-
-/* ---------- Card ---------- */
+/* Card Container */
 .login-card {
     width: 100%;
-    max-width: 900px;
+    max-width: 860px;
     background: #ffffff;
-    box-shadow: 0 25px 50px rgba(11, 58, 141, 0.35);
+    border-radius: 4px;
+    box-shadow: 0 20px 45px rgba(16, 44, 92, 0.28);
     overflow: hidden;
 }
+
 .login-row {
-    display: flex;                     /* make both sides the same height */
+    display: flex;
     margin: 0;
-    min-height: 460px;
+    min-height: 440px;
 }
-/* Remove the Bootstrap clearfix pieces, they break flex layout */
+
 .login-row:before,
 .login-row:after {
     display: none;
 }
+
 .login-row > [class*="col-"] {
     padding: 0;
 }
 
-/* ---------- Left side (form) ---------- */
+/* Left Half - Royal Blue Form */
 .login-left {
-    background: linear-gradient(160deg, #0b3a8d 0%, #1565c0 100%);
+    background: #0f52b6;
+    background: linear-gradient(145deg, #0f52b6 0%, #0d469c 100%);
     color: #ffffff;
-    padding: 40px 45px !important;
+    padding: 42px 42px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
+/* Brand badge: Circle with RBF + Login text */
 .login-brand {
     display: flex;
     align-items: center;
-    margin-bottom: 45px;
-}
-.login-brand img {
-    margin-right: 14px;
-    border-radius: 50%;
-}
-.login-brand span {
-    font-size: 22px;
-    letter-spacing: 1px;
+    margin-bottom: 36px;
 }
 
-/* Input boxes: only a line under the text */
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    margin-right: 14px;
+}
+
+.brand-title {
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* Input Fields - Underline style */
+.login-form .form-group {
+    margin-bottom: 22px;
+    position: relative;
+}
+
 .login-form .form-control {
-    background: transparent;
+    background: transparent !important;
     border: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 0;
     box-shadow: none;
     color: #ffffff;
     font-size: 15px;
-    padding-left: 0;
+    padding: 8px 0;
     height: 44px;
+    transition: border-color 0.2s ease;
 }
+
 .login-form .form-control:focus {
     border-bottom: 2px solid #ffffff;
     box-shadow: none;
-}
-.login-form .form-control::-webkit-input-placeholder { color: rgba(255, 255, 255, 0.7); }
-.login-form .form-control::-moz-placeholder          { color: rgba(255, 255, 255, 0.7); opacity: 1; }
-.login-form .form-control:-ms-input-placeholder      { color: rgba(255, 255, 255, 0.7); }
-
-/* Keep the blue look when the browser auto-fills the fields */
-.login-form .form-control:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px #0f4aa8 inset;
-    -webkit-text-fill-color: #ffffff;
+    color: #ffffff;
 }
 
-/* Remember Me and Forgot Password on one line */
+.login-form .form-control::-webkit-input-placeholder { color: rgba(255, 255, 255, 0.65); }
+.login-form .form-control::-moz-placeholder          { color: rgba(255, 255, 255, 0.65); opacity: 1; }
+.login-form .form-control:-ms-input-placeholder      { color: rgba(255, 255, 255, 0.65); }
+
+/* Prevent yellow background on browser autocomplete */
+.login-form .form-control:-webkit-autofill,
+.login-form .form-control:-webkit-autofill:hover,
+.login-form .form-control:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #0e4ca7 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Remember Me & Forgot Password Row */
 .login-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 15px;
+    margin-bottom: 26px;
 }
+
 .login-remember {
-    font-weight: normal;
+    font-weight: 400;
     font-size: 13px;
+    color: #ffffff;
     margin: 0;
     cursor: pointer;
+    user-select: none;
 }
-.login-remember input {
-    margin-right: 6px;
+
+.login-remember input[type="checkbox"] {
+    margin-right: 7px;
     vertical-align: middle;
+    cursor: pointer;
 }
+
 .login-forgot,
 .login-forgot:hover,
 .login-forgot:focus {
-    color: #bcdcff;
+    color: rgba(255, 255, 255, 0.85);
     font-size: 13px;
+    text-decoration: none;
 }
 
-/* Sign In button: white button with blue text */
+.login-forgot:hover {
+    text-decoration: underline;
+}
+
+/* Sign In Button */
 .login-form .btn-login {
     background: #ffffff;
-    border: 0;
-    border-radius: 2px;
-    color: #0b3a8d;
+    border: none;
+    border-radius: 3px;
+    color: #0f52b6;
     font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 1px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-top: 10px;
-}
-.login-form .btn-login:hover,
-.login-form .btn-login:focus {
-    background: #d9ebff;
-    color: #0b3a8d;
+    padding: 11px 16px;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
-/* Error messages from PHP (wrong user name / password) */
+.login-form .btn-login:hover,
+.login-form .btn-login:focus {
+    background: #f0f5ff;
+    color: #0c4394;
+    outline: none;
+}
+
+.login-form .btn-login:active {
+    transform: scale(0.99);
+}
+
+/* Validation & PHP Alert Messages */
 .login-form p.bg-warning,
 .login-form p.bg-danger {
     padding: 8px 12px;
-    border-radius: 2px;
-    color: #7a1f1f;                    /* dark text so it can be read on the light box */
+    border-radius: 3px;
     font-size: 13px;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 }
-.login-form p.bg-warning b,
-.login-form p.bg-danger b {
-    margin-left: 6px;
+
+.login-form p.bg-danger {
+    background-color: #ffebee;
+    color: #c62828;
 }
-/* Error messages from the browser check (field is empty) */
+
+.login-form p.bg-warning {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
 #login .form-group label.error {
-    color: #ffd0d0;
-    display: inline-block;
+    color: #ffcdd2;
     font-size: 12px;
-    font-weight: normal;
-    margin: 4px 0 0 0;
-    padding: 0;
-    text-align: left;
-}
-.login-form small {
-    color: #ffd0d0;
+    font-weight: 400;
+    margin-top: 5px;
+    display: block;
 }
 
-/* The Glyphicons font file is not available offline,
-   so show a simple symbol instead of the icon */
-.red {
-    color: #FB3A3A;
-}
-.glyphicon {
-    font-family: Arial, Helvetica, sans-serif;
-}
-.glyphicon-remove-circle:before {
-    content: "\2716";
-}
-
-/* ---------- Right side (picture and tip) ---------- */
+/* Right Half - Tip text & Laptop chart artwork */
 .login-right {
-    background: linear-gradient(0deg, rgba(11, 58, 141, 0.55), rgba(11, 58, 141, 0.05)),
-                url("../img/login-side.jpg") center center / cover no-repeat;
-    display: flex;
-    align-items: flex-start;           /* tip text at the top, picture below */
-    padding: 60px 40px 40px !important;
-}
-.login-tip {
+    background: url("../img/login-side.jpg") center bottom / cover no-repeat;
     color: #ffffff;
-    max-width: 280px;
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    padding: 48px 40px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
 }
+
+.login-tip {
+    max-width: 320px;
+    z-index: 2;
+}
+
 .login-tip small {
     display: block;
-    font-size: 10px;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-.login-tip h2 {
-    font-size: 28px;
-    font-weight: 300;
-    line-height: 1.2;
-    margin: 0 0 12px 0;
-}
-.login-tip p {
-    font-size: 12px;
-    opacity: 0.9;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 12px;
+    text-transform: uppercase;
 }
 
-/* ---------- Small screens: show only the form ---------- */
+.login-tip h2 {
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0 0 14px 0;
+    color: #ffffff;
+}
+
+.login-tip p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+/* Responsive adjustment for phones */
 @media (max-width: 767px) {
     .login-row {
         display: block;
-        min-height: 0;
+        min-height: auto;
     }
     .login-left {
-        padding: 30px 25px !important;
+        padding: 30px 22px !important;
     }
 }
-
-/* Original project styles: match the dark navy colours in css/dashboard.css. */
-.login-body {
-    background-color: #0b0f1e;
-    background-image: linear-gradient(rgba(11, 15, 30, 0.88), rgba(11, 15, 30, 0.88)), url("../img/login-back2.jpg");
-}
-.login-card { background: #141b2e; border: 1px solid #202a46; border-radius: 11px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3); }
-.login-left { background: linear-gradient(160deg, #1d2640, #141b2e); }
-.login-form .form-control { border-bottom-color: #657398; }
-.login-form .form-control:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px #141b2e inset; }
-.login-form .btn-login { background: #5071ea; color: #fff; border-radius: 6px; }
-.login-form .btn-login:hover, .login-form .btn-login:focus { background: #6482f0; color: #fff; }
-.login-forgot, .login-forgot:hover, .login-forgot:focus { color: #a8bcff; }
-.login-right { background-image: linear-gradient(0deg, rgba(11, 15, 30, 0.8), rgba(11, 15, 30, 0.3)), url("../img/login-side.jpg"); }

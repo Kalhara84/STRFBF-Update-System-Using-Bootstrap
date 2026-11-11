@@ -1,4 +1,22 @@
 <?php
+/* ==============================================================================
+   FILE: login.php
+   PURPOSE: User Authentication and Login screen.
+   MATCHING DESIGN: Image 1 (RBF Login screen)
+
+   ASSET & CODE SOURCES / DOCUMENTATION NOTE:
+   - CSS Framework: "css/bootstrap.min.css" (Bootstrap v3.3.7, stored locally in css/ folder)
+   - Custom Styling: "css/custom.css" (Custom stylesheet matching Image 1 layout & colors)
+   - Preloader CSS: "css/preloader.css" (Local preloader styling)
+   - jQuery Library: "js/jquery-1.10.2.min.js" (Local jQuery library)
+   - Form Validation: "js/jquery.validate.min.js" (Client-side validation plugin)
+   - Login Handler Script: "js/login.js" (Local form validation rules & handlers)
+   - Images:
+       * "img/login-back2.jpg" - Fluid 3D wavy background wallpaper
+       * "img/login-side.jpg"  - Right-side card illustration with laptop bar-chart
+       * Circular "RBF" badge  - Rendered via CSS (.brand-badge in css/custom.css)
+   ============================================================================== */
+
 // Hide PHP notices and warnings on the page
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 // The session starts below; logout.php clears it when the user signs out.
@@ -434,10 +452,10 @@ $te=$_SERVER['DOCUMENT_ROOT'].'/ffmal/css/bootstrap.min.css';
     <!-- LEFT SIDE: logo and login form -->
     <div class="col-sm-6 login-left">
 
-      <!-- Logo and title -->
+      <!-- Logo and title matching Image 1 -->
       <div class="login-brand">
-        <img src="img/lgf-Logo.png" alt="Logo" width="48" height="48" />
-        <span>Login</span>
+        <span class="brand-badge">RBF</span>
+        <span class="brand-title">Login</span>
       </div>
 
       <!-- Login form: sends user name and password to this same page -->
@@ -478,7 +496,7 @@ $te=$_SERVER['DOCUMENT_ROOT'].'/ffmal/css/bootstrap.min.css';
 
         <!-- Sign In button -->
         <div class="form-group">
-          <input type="submit" name="submit" value="Sign In" class="btn btn-block btn-lg btn-primary btn-login" tabindex="5">
+          <input type="submit" name="submit" value="SIGN IN" class="btn btn-block btn-lg btn-login" tabindex="5">
         </div>
       </form>
     </div>
