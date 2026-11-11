@@ -1,27 +1,24 @@
 <?php
 /* ==============================================================================
    FILE: dashboard.php
-   PURPOSE: Main Dashboard page (matching Image 2).
+   PURPOSE: Main Dashboard page (matching the new Dark Navy reference image).
 
    CSS & JAVASCRIPT ASSET SOURCES / DOCUMENTATION NOTE:
    - "css/bootstrap.min.css":
        Bootstrap v3.3.7 CSS framework stored locally in the "css" directory.
-       Provides responsive grid, typography, and base utility classes without external CDN.
+       Provides base responsive grid, layout resets, and typography.
    - "css/dashboard.css":
-       Custom dashboard stylesheet stored locally in the "css" directory.
-       Provides styling for the periwinkle sidebar (#687fd9), active pill outline,
-       cyan toolbar buttons (#24b8d9), and clean card rows with horizontal dividers.
+       Custom dark stylesheet located in the "css" directory.
+       Provides the dark midnight blue palette (#0b1020, #0e1428, #131a2e),
+       royal blue button (#4f6fe6), and table rows matching the user's reference image.
    - "js/jquery-1.10.2.min.js":
        Local jQuery library located in the "js" directory.
-       Enables DOM selection and interactive event handling.
    - "js/bootstrap.min.js":
        Bootstrap v3.3.7 JavaScript located in the "js" directory.
-       Provides Bootstrap component support.
    - "js/dashboard.js":
-       Custom dashboard scripts located in the "js" directory.
-       Handles sidebar toggle (open/close) and menu accordion expand/collapse.
+       Interactive script handling the "Toggle Sidebar" button and submenu collapse/expand.
    - "sidebar.php":
-       Modular PHP component included into this dashboard layout.
+       Sidebar navigation component included on the left.
    ============================================================================== */
 
 // Start session to access logged-in user information (PHP 5.3+ compatible)
@@ -29,19 +26,14 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-// Check if user is validated; if not logged in, optionally redirect or set demo defaults
-if (!isset($_SESSION["validated"]) || $_SESSION["validated"] !== true) {
-    // If not logged in, you can enable redirection:
-    // header("Location: login.php");
-    // exit;
-}
-
-// User details for dashboard display (matching Image 2 defaults)
-$companyName    = !empty($_SESSION['scomnam']) ? $_SESSION['scomnam'] : 'Ravi Breeder Farm';
+// User details for dashboard display (matching reference image defaults)
+$companyName    = !empty($_SESSION['scomnam']) && $_SESSION['scomnam'] !== 'Ravi Breeder Farm'
+    ? $_SESSION['scomnam'] 
+    : 'Ramico International (Pvt) Ltd';
 $userName       = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
-$userEmail      = !empty($_SESSION['dashboard_email']) ? $_SESSION['dashboard_email'] : '';
-$passwordExpiry = !empty($_SESSION['dashboard_password_expiry']) ? $_SESSION['dashboard_password_expiry'] : '';
-$companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] : '';
+$userEmail      = !empty($_SESSION['dashboard_email']) ? $_SESSION['dashboard_email'] : 'user@example.com';
+$passwordExpiry = !empty($_SESSION['dashboard_password_expiry']) ? $_SESSION['dashboard_password_expiry'] : '2026-12-31';
+$companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] : '-';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +47,7 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
     <!-- 1. Bootstrap v3.3.7 CSS (Local file from css/ folder) -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 
-    <!-- 2. Custom Dashboard Stylesheet (Local file from css/ folder) -->
+    <!-- 2. Custom Dark Dashboard Stylesheet (Local file from css/ folder) -->
     <link rel="stylesheet" type="text/css" href="css/dashboard.css">
 
     <!-- HTML5 shim for backward compatibility with IE8 -->
@@ -70,51 +62,52 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
     <!-- Modular Sidebar included from sidebar.php -->
     <?php include 'sidebar.php'; ?>
 
-    <!-- Main Content Area (Matching Image 2) -->
+    <!-- Main Content Area (Matching reference image) -->
     <main class="main-content">
 
-        <!-- Top Action Buttons (Cyan Toolbar) -->
+        <!-- Top Action Button ("Toggle Sidebar" button in image) -->
         <div class="toolbar-actions">
-            <button type="button" class="btn-cyan" id="sidebarToggleBtn" title="Toggle Sidebar">
-                <span class="icon-bars"></span>
-                <span>Toggle Sidebar</span>
-            </button>
-            <button type="button" class="btn-cyan">
-                <span>Inq All Docs</span>
-            </button>
-            <button type="button" class="btn-cyan">
-                <span>-------</span>
-            </button>
-            <button type="button" class="btn-cyan">
-                <span>-------</span>
+            <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn" title="Toggle Sidebar">
+                Toggle Sidebar
             </button>
         </div>
 
-        <!-- Center Information Card (Matching Image 2 layout & lines) -->
+        <!-- Center Information Card (Dark Navy Slate Container) -->
         <div class="dashboard-card">
 
-            <!-- Row 1: User Name -->
-            <div class="info-row">
-                <div class="info-label">User Name</div>
-                <div class="info-value"><?= htmlspecialchars($userName) ?></div>
+            <!-- Card Header: Logo Badge & Title -->
+            <div class="card-header-area">
+                <div class="card-logo-badge">Logo</div>
+                <h2 class="card-main-title">Service Provider Name</h2>
             </div>
 
-            <!-- Row 2: Email -->
-            <div class="info-row">
-                <div class="info-label">Email</div>
-                <div class="info-value"><?= htmlspecialchars($userEmail) ?></div>
-            </div>
+            <!-- Inner Table Box with Divider Lines -->
+            <div class="card-table-box">
 
-            <!-- Row 3: Password Expiry -->
-            <div class="info-row">
-                <div class="info-label">Password Expiry</div>
-                <div class="info-value"><?= htmlspecialchars($passwordExpiry) ?></div>
-            </div>
+                <!-- Row 1: User Name -->
+                <div class="info-row">
+                    <div class="info-label">User Name</div>
+                    <div class="info-value"><?= htmlspecialchars($userName) ?></div>
+                </div>
 
-            <!-- Row 4: Company News -->
-            <div class="info-row">
-                <div class="info-label">Company News</div>
-                <div class="info-value"><?= htmlspecialchars($companyNews) ?></div>
+                <!-- Row 2: Email -->
+                <div class="info-row">
+                    <div class="info-label">Email</div>
+                    <div class="info-value"><?= htmlspecialchars($userEmail) ?></div>
+                </div>
+
+                <!-- Row 3: Password Expiry -->
+                <div class="info-row">
+                    <div class="info-label">Password Expiry</div>
+                    <div class="info-value"><?= htmlspecialchars($passwordExpiry) ?></div>
+                </div>
+
+                <!-- Row 4: Company News -->
+                <div class="info-row">
+                    <div class="info-label">Company News</div>
+                    <div class="info-value"><?= htmlspecialchars($companyNews) ?></div>
+                </div>
+
             </div>
 
         </div>
@@ -134,4 +127,3 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
 
 </body>
 </html>
-
