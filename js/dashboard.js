@@ -58,3 +58,4 @@ $(document).ready(function () {
         $(".sidebar").addClass("collapsed");
     }
 });
+
