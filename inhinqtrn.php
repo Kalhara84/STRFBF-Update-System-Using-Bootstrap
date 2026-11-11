@@ -209,12 +209,7 @@ function popfpl(te_inlsno)
 <BODY class='document-inquiry' onLoad='window_onload();'>
 <label id='debug' name='debug'></label>
 <form name="inhinqtrn" method="post" action="inhinqtrn.php" onsubmit="return valkey();">
-<section class="document-search" aria-labelledby="documentSearchTitle">
-    <div class="document-search-heading">
-        <div><h1 id="documentSearchTitle">Find a document</h1>
-        <p>Choose a document type or enter a document number, then select a match to view its details.</p></div>
-        <span class="document-section-tag">All Documents</span>
-    </div>
+<section class="document-search">
     <div class="document-search-fields">
         <div class="document-field">
             <label for="syssno">Document type</label>
@@ -248,7 +243,7 @@ function popfpl(te_inlsno)
         </div>
         <button type="submit" name="ok" id="ok" class="btn btn-primary document-view">View document <span aria-hidden="true">&#8594;</span></button>
     </div>
-    <p id="documentSearchStatus" class="document-search-status" role="status" aria-live="polite">Search by type or document number to get started.</p>
+    <p id="documentSearchStatus" class="document-search-status" role="status" aria-live="polite" style="display:none;"></p>
 </section>
 <?php if ($te_ok != 'y' && !isset($_POST['ok'])) { ?>
 <div class="document-empty">
