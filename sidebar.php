@@ -47,7 +47,7 @@ $loggedUser = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
                 </a>
                 <ul class="sidebar-submenu" style="display: block;">
                     <li class="sidebar-submenu-item">
-                        <a href="#" class="sidebar-submenu-link">Tea Purchases/Grn</a>
+                        <a href="dpmm.php" class="sidebar-submenu-link">(1) Enter Payment Request</a>
                     </li>
                     <li class="sidebar-submenu-item">
                         <a href="#" class="sidebar-submenu-link">Reports</a>
@@ -70,7 +70,7 @@ $loggedUser = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
                 </a>
                 <ul class="sidebar-submenu" style="display: none;">
                     <li class="sidebar-submenu-item">
-                        <a href="dpmm.php" class="sidebar-submenu-link">(1) Enter Payment Request</a>
+                        <a href="#" class="sidebar-submenu-link">(1) Item Master Maintenance</a>
                     </li>
                     <li class="sidebar-submenu-item">
                         <a href="#" class="sidebar-submenu-link">(2) Locations</a>
