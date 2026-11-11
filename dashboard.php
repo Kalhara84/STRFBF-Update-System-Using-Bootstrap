@@ -37,6 +37,7 @@ if (!isset($_SESSION["validated"]) || $_SESSION["validated"] !== true) {
 }
 
 // User details for dashboard display (matching Image 2 defaults)
+$companyName    = !empty($_SESSION['scomnam']) ? $_SESSION['scomnam'] : 'Ravi Breeder Farm';
 $userName       = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
 $userEmail      = !empty($_SESSION['dashboard_email']) ? $_SESSION['dashboard_email'] : '';
 $passwordExpiry = !empty($_SESSION['dashboard_password_expiry']) ? $_SESSION['dashboard_password_expiry'] : '';
@@ -49,7 +50,7 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Dashboard - <?= htmlspecialchars($_SESSION['scomnam'] ?? 'Ravi Breeder Farm') ?></title>
+    <title>Dashboard - <?= htmlspecialchars($companyName) ?></title>
 
     <!-- 1. Bootstrap v3.3.7 CSS (Local file from css/ folder) -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">

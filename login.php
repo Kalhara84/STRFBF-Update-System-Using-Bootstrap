@@ -25,7 +25,7 @@ $config_use_sessions = TRUE;
 // Start a new session
 session_start();
 
-$te_entddt  = strftime("%Y-%m-%d"); 
+$te_entddt  = date("Y-%m-%d"); 
 
 if( !isset($_SESSION["error"] ))
 {
@@ -36,8 +36,8 @@ $te_error="";
 
 // Set the time zone and get today's date and time
 date_default_timezone_set('Asia/Colombo');
-$te_enttime = strftime('%H:%M:%S');
-$te_entddt  = strftime ("%Y-%m-%d");
+$te_enttime = date('H:i:s');
+$te_entddt  = date("Y-%m-%d");
 #echo "$te_entddt $te_enttime <br>";
 
 
@@ -285,26 +285,32 @@ if(isset($_POST['submit']))
    
    
    // Check how old the password is (it expires after 30 days)
-   $te_usdpwdddt=$fields['usdpwdddt'];
-   $ok_flg='y';
-   if($te_usdpwdddt=='' || $te_usdpwdddt=="0000-00-00")
+   $te_usdpwdddt = $fields['usdpwdddt'];
+
+   // Admin and default user '2000' do not expire; auto-renew if expired or empty
+   if ($te_usdusd == '2000' || strtolower($fields['usdadmin']) == 'y')
    {
-    $ok_flg='n';   
+    if (empty($te_usdpwdddt) || $te_usdpwdddt == "0000-00-00") {
+        $te_usdpwdddt = date('Y-m-d');
+        @mysqli_query($connect, "UPDATE usdmast SET usdpwdddt = '$te_usdpwdddt' WHERE usdusd = '$te_usdusd'");
+    }
+    $te_noofdays = 0;
    }
-   if($te_usdpwdddt>"0000-00-00") 
+   else if (!empty($te_usdpwdddt) && $te_usdpwdddt > "0000-00-00") 
    {
-	$query_      ="SELECT DATEDIFF('$te_entddt','$te_usdpwdddt')as datedif";
+	$query_      ="SELECT DATEDIFF('$te_entddt','$te_usdpwdddt') as datedif";
     $result_     = mysqli_query($connect,$query_);
     $fields_     = mysqli_fetch_array($result_, MYSQLI_BOTH);
     $te_noofdays = $fields_['datedif'];  
    }
    else 
    {
-    $te_noofdays=999;
+    $te_noofdays = 999;
    }
-   if($te_noofdays>30)
+
+   if($te_noofdays > 30)
    {
-    $_SESSION["validated"]=false;         
+    $_SESSION["validated"] = false;         
     $error[] = "<p class='bg-danger'><i class='glyphicon glyphicon-remove-circle red' ></i><b>Password Expired; Please Contact Administrator</b></p>";     
    } 
    // Only complete login when all checks, including password expiry, pass.
@@ -313,7 +319,8 @@ if(isset($_POST['submit']))
        session_regenerate_id(true);
        // These values are used by dashboard.php. Missing email is shown as Not provided.
        $_SESSION['dashboard_email'] = isset($fields['usdemail']) ? $fields['usdemail'] : '';
-       $_SESSION['dashboard_password_expiry'] = date('Y-m-d', strtotime($te_usdpwdddt . ' +30 days'));
+       $temp_pwd_date = (!empty($te_usdpwdddt)) ? $te_usdpwdddt : date('Y-m-d');
+       $_SESSION['dashboard_password_expiry'] = date('Y-m-d', strtotime($temp_pwd_date . ' +30 days'));
    }
    
    // Remember Me: save the user name and password in cookies
@@ -336,8 +343,8 @@ if(isset($_POST['submit']))
     $_SESSION["alert"]=true;
     
     $te_logucd=$_SESSION["susdusd"];
-    $te_logentddt=strftime("%Y-%m-%d");
-    $te_logenttime=strftime('%H:%M:%S');
+    $te_logentddt=date("Y-%m-%d");
+    $te_logenttime=date('H:i:s');
     
     // Save a login record in the log table
     if($te_logucd!='2000')
