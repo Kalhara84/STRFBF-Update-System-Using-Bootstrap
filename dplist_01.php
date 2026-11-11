@@ -153,8 +153,6 @@ function loadModalData(inhsno, inhdno) {
 </head>
 <body>
 <div class="wrapper">
-    <h6 class="text-primary border-bottom border-dark pb-1 mb-2 flex-shrink-0"><b>Direct Payment Master List</b></h6>
-
     <form name="fn" method="post" action="dplist_01.php" class="bg-white p-2 mb-2 border border-dark flex-shrink-0">
         <div class="row gx-2 align-items-end">
             <div class="col-md-3">

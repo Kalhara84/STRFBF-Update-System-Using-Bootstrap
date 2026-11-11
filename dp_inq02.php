@@ -230,7 +230,7 @@ $(document).ready(function() {
 </head>
 <body>
 <div class="wrapper">
-    <h6 class="text-primary border-bottom pb-1 mb-2 flex-shrink-0"><b>Direct Payment Inquiry</b></h6>
+    
 
     <form name='fn' method='post' action='dp_inq02.php' class="bg-white p-2 rounded mb-2 shadow-sm border flex-shrink-0">
         <div class="row gx-2 align-items-end">
