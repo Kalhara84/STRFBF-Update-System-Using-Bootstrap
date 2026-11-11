@@ -44,6 +44,9 @@ $te_inhddt 	= strftime("%d/%m/%Y");
 $te_inhcomsno	= "";
 $te_inhtyp	= "";  //
 $te_inhdno	= "";
+$te_inhsno = '';
+$te_syssno = '';
+$te_syssnoauto = '';
 
 $te_sysddt = strftime("%d/%m/%Y");
 $te_sysddt = "var te_sysddt = '".$te_sysddt."';\n";
@@ -86,25 +89,9 @@ if(isset($_POST['ok']))
 <link rel="stylesheet" href="css/bootstrap5.min.css">
 <TITLE>Inquire Inventory Transactions</TITLE>
 
-<link rel='stylesheet' href='css/mystyle.css' />
+<link rel='stylesheet' href='css/mystyle.css?v=<?php echo filemtime(dirname(__FILE__) . "/css/mystyle.css"); ?>' />
 
-<style type='text/css'>
-body,table
-{
-  font-size:10px;
-  font-family: Times New Roman;
-}
 
-/* class freeze_col is used to freeze the headers of the table. Only the styles position, top & z-index is used. */
-.freeze_col{
-	position: sticky;
-    top: 0;
-    z-index: 1;
-
-	height: 30px;
-	background-color: #ff8c00;
-}
-</style>
 <script type="text/JavaScript" src="js/formvalidation.js"></script>
 <script language="JavaScript" src="js/calendar2.js"></script>
 <SCRIPT LANGUAGE="JavaScript" SRC="js/autocomplete.js"></SCRIPT>
@@ -120,6 +107,7 @@ var isIEMac = (isIE && navigator.userAgent.indexOf("Mac") != -1);
 function window_onload()
 {
   document.inhinqtrn.inhdno.focus();
+  documentSelectionChanged();
 }
 
 
@@ -154,26 +142,14 @@ function valkey()
 
 function load_dno()
 {
- var inhdno=document.getElementById('inhdno').value
+ var inhdno=document.getElementById('inhdno').value.trim();
+ if (!inhdno) return;
+ document.getElementById('documentSearchStatus').textContent = 'Finding matching documents...';
  //alert(inhdno)
  x_load_dno(inhdno,load_dno_x);
 }
 
-function load_dno_x(str_dno)
-{
- //alert (str_dno)
- //document.getElementById('debug').innerHTML = str_dno
- var frm = document.inhinqtrn
- var the_array = str_dno.split("####");
- document.inhinqtrn.inhsno.options.length = the_array.length
- for(x=0;x<the_array.length;x++)
- {
-  var lines = the_array[x].split("");
-  document.inhinqtrn.inhsno.options[x].value = lines[0]  //lines[0]
-  document.inhinqtrn.inhsno.options[x].text = lines[1]
- }
-
-}
+function load_dno_x(str_dno) { renderDocumentOptions(str_dno); }
 
 function load_dnodd()
 {
@@ -184,20 +160,22 @@ function load_dnodd()
  }
 }
 
-function load_dnodd_x(str_dno)
-{
- //alert (str_dno)
- //document.getElementById('debug').innerHTML = str_dno
- var frm = document.inhinqtrn
- var the_array = str_dno.split("####");
- document.inhinqtrn.inhsno.options.length = the_array.length
- for(x=0;x<the_array.length;x++)
- {
-  var lines = the_array[x].split("");
-  document.inhinqtrn.inhsno.options[x].value = lines[0]  //lines[0]
-  document.inhinqtrn.inhsno.options[x].text = lines[1]
- }
+function load_dnodd_x(str_dno) { renderDocumentOptions(str_dno); }
 
+function renderDocumentOptions(response) {
+    var select = document.getElementById('inhsno');
+    select.options.length = 0;
+    select.add(new Option('Select a matching document', ''));
+    response.split('####').forEach(function (entry) {
+        var parts = entry.split(String.fromCharCode(25, 25));
+        if (parts[0] && parts[1]) select.add(new Option(parts[1], parts[0]));
+    });
+    var count = select.options.length - 1;
+    document.getElementById('documentSearchStatus').textContent = count ? count + ' matching document(s). Choose one to continue.' : 'No documents found. Try another type or document number.';
+    documentSelectionChanged();
+}
+function documentSelectionChanged() {
+    document.getElementById('ok').disabled = !document.getElementById('inhsno').value;
 }
 
 
@@ -228,102 +206,59 @@ function popfpl(te_inlsno)
 </HEAD>
 
 
-<BODY onLoad='window_onload();' bgcolor=''>
+<BODY class='document-inquiry' onLoad='window_onload();'>
 <label id='debug' name='debug'></label>
-<FORM NAME="inhinqtrn" METHOD="POST" ACTION="inhinqtrn.php" RUNAT='SERVER'>
-  <div name="divkey" class='myLayersClassv'>
-
-
-<table align="center" width='100%' border='0' style='position:relative'>
-<tr>
-
-<td width="3%" class='lbl' class='lbl' align='right'>Type:</td>
-
-<td width="15%" >
-<?php
-
- $w=260;
- $wpx =$w.'px';
- $t ="7px";
- $sqlquery= "select syssno,concat(sysdes,' - ',sysrno) sysdes from sysmast where sysrtp='8' order by sysdes";
- $result = mysqli_query(db_connection(), $sqlquery) or die("no records");
-
- $o->GenerateDropDownListauto("syssno","$te_syssno","syssno","sysdes",
-     "this.form.syssnoauto.value=this.options[this.selectedIndex].text;load_dnodd();hide_div();",
-     "return enter(document.forms[0].locsnoauto)","$wpx","$t");
- $w -=23;
- $wpx=$w.'px';
-?>
-
- <INPUT TYPE="text" NAME="syssnoauto" id="syssnoauto" VALUE="<?=$te_syssnoauto?>"
-  ONKEYUP="autoComplete(this,this.form.syssno,'text',true);load_dnodd();hide_div();"
-  style="position:absolute;top:<?=$t?>;z-index:10;width:<?=$wpx?>;"
-  onkeypress="return enter(document.forms[0].locsnoauto)" onBlur=""></INPUT></td>
-
-<th class='lbl' width='10%'>#:</th>
-
-     <td width='12%'>
-     <INPUT TYPE="text" NAME="inhdno" id="inhdno" size="30" maxlength='30' VALUE="<?=$te_inhdno?>"
-      onblur="load_dno();"
-      onkeypress="return enter(document.inhinqtrn.ok)">
-</td>
-
-
-	 <th class='lbl' width='20%'>Select:</th>
-     <td width='15%'>
-	  <?php
-
-       $sqlquery = "select inhsno,concat(inhdno,'-',inhddt) inh from inhtran
-                left join commast on inhcomsno=comsno
-                left join locmast on inhlocsno=locsno
-			    where inhdno='$te_inhdno' order by inhdno";
-
-       $sqlquery = "select inhsno,concat(inhdno,'-',typ.sysdes,'-',inhddt,'-',locloc) inh from inhtran
-                left join commast on inhcomsno=comsno
+<form name="inhinqtrn" method="post" action="inhinqtrn.php" onsubmit="return valkey();">
+<section class="document-search" aria-labelledby="documentSearchTitle">
+    <div class="document-search-heading">
+        <div><h1 id="documentSearchTitle">Find a document</h1>
+        <p>Choose a document type or enter a document number, then select a match to view its details.</p></div>
+        <span class="document-section-tag">All Documents</span>
+    </div>
+    <div class="document-search-fields">
+        <div class="document-field">
+            <label for="syssno">Document type</label>
+            <select name="syssno" id="syssno" class="form-select" onchange="this.form.syssnoauto.value=this.options[this.selectedIndex].text;load_dnodd();">
+                <option value="">Choose a type</option>
+                <?php
+                $result = mysqli_query(db_connection(), "select syssno,concat(sysdes,' - ',sysrno) sysdes from sysmast where sysrtp='8' order by sysdes") or die('Unable to load document types');
+                while ($rec = mysqli_fetch_assoc($result)) {
+                    $selected = $te_syssno == $rec['syssno'] ? ' selected' : '';
+                    echo '<option value="'.htmlspecialchars($rec['syssno'], ENT_QUOTES, 'UTF-8').'"'.$selected.'>'.htmlspecialchars($rec['sysdes'], ENT_QUOTES, 'UTF-8').'</option>';
+                }
+                ?>
+            </select>
+            <input type="hidden" name="syssnoauto" value="<?php echo htmlspecialchars($te_syssnoauto, ENT_QUOTES, 'UTF-8'); ?>">
+        </div>
+        <div class="document-field">
+            <label for="inhdno">Document number</label>
+            <input type="text" name="inhdno" id="inhdno" maxlength="30" class="form-control" placeholder="Enter document number" value="<?php echo htmlspecialchars($te_inhdno, ENT_QUOTES, 'UTF-8'); ?>" onblur="load_dno();" onkeydown="if(event.key === 'Enter'){event.preventDefault();load_dno();}">
+        </div>
+        <div class="document-field document-match">
+            <label for="inhsno">Matching document</label>
+            <?php
+            $lookup_dno = mysqli_real_escape_string(db_connection(), $te_inhdno);
+            $sqlquery = "select inhsno,concat(inhdno,' - ',typ.sysdes,' - ',inhddt,' - ',locloc) inh from inhtran
                 left join locmast on inhlocsno=locsno
                 left join sysmast typ on inhtyp=typ.sysrno and typ.sysrtp=8
-			    where inhdno='$te_inhdno' order by inhdno";
-
-       $result = mysqli_query(db_connection(), $sqlquery) or die("Error inh");
-	   $o->GenerateDropDownList("inhsno","$te_inhsno","inhsno","inh","","return enter(document.inhinqtrn.ok);");
-	  ?>
-     </td>
-
-     </tr>
-     </table>
-     <table align="center" width='100%' border='0' style='position:relative'>
-     <tr>
-     <td align='right'>
-      <input type='submit' value='CHECK' name='ok' onClick='return valkey();' class='submit'></input>
-
-      <?php
-      if($_SESSION["sLG"]=='MD')
-      {
-       echo "<input type='button' value='DASHBD' onclick=\"window.location='dashboard_md.php'\" class='submit'></input>";
-      }
-      elseif ($_SESSION["sLG"]=='MAN')
-      {
-       echo "<input type='button' value='DASHBD' onclick=\"window.location='dashboard_man.php'\" class='submit'></input>";
-      }
-      else
-      {
-       //echo "<input type='button' value='MENU' onclick=\"window.location='menu.php'\" class='submit'></input>";
-      }
-      ?>
-
-
-
-
-      <!--input type="button" name="reload" value="RELOAD" OnClick ="window.location='inhinqtrn.php';" class='submit'></input> -->
-     </td>
-    </tr>
-   </table>
-
-     </div>
-  <br>
-
+                where inhdno='$lookup_dno' order by inhdno";
+            $result = mysqli_query(db_connection(), $sqlquery) or die('Unable to load documents');
+            $o->GenerateDropDownList('inhsno', $te_inhsno, 'inhsno', 'inh', 'documentSelectionChanged();', 'return enter(document.inhinqtrn.ok);');
+            ?>
+        </div>
+        <button type="submit" name="ok" id="ok" class="btn btn-primary document-view">View document <span aria-hidden="true">&#8594;</span></button>
+    </div>
+    <p id="documentSearchStatus" class="document-search-status" role="status" aria-live="polite">Search by type or document number to get started.</p>
+</section>
+<?php if ($te_ok != 'y' && !isset($_POST['ok'])) { ?>
+<div class="document-empty">
+    <span class="document-empty-icon" aria-hidden="true">&#128196;</span>
+    <h2>Your document details will appear here</h2>
+    <p>Select a matching document above and click <strong>View document</strong>.</p>
+</div>
+<?php } ?>
+<div class="document-results">
 <?php
-
 
 if(isset($_POST['ok']))
 {
@@ -1316,6 +1251,8 @@ if($te_ok=='y')
 
 
 
+</div>
+</form>
 </body>
 </html>
 
@@ -1352,8 +1289,8 @@ Class HtmlFormsObjects
             {
          global $result;
 
-         echo "<select id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'> \n";
-         echo"<option></option>";
+         echo "<select class='form-select' id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'> \n";
+         echo "<option value=''>Select a matching document</option>";
      mysqli_data_seek($result,0);
          while ($rec = mysqli_fetch_array($result)){
 
@@ -1374,7 +1311,7 @@ Class HtmlFormsObjects
 
          echo "<select id='$HtmlObjectName' name='$HtmlObjectName' onChange='$action' Onkeypress='$onkeyp'
          style='position:absolute;top:8px;z-index:-1;width:110;clip:rect(0px,110px, 22px, 90);'> \n";
-         echo"<option></option>";
+         echo "<option value=''>Select a matching document</option>";
      mysqli_data_seek($result,0);
          while ($rec = mysqli_fetch_array($result)){
 
