@@ -1,0 +1,25 @@
+/* Applied only inside the payment workspace; printed documents retain their styles. */
+@media screen {
+    :root { color-scheme: dark; --bs-body-bg: #131a2e; --bs-body-color: #e0e7f5; --bs-border-color: #33415f; }
+    body { background: #131a2e !important; color: #e0e7f5 !important; padding: 16px !important; }
+    .wrapper, .bg-white, .bg-light, .card, .card-body, .modal-content, .radio-box { background-color: #182238 !important; color: #e0e7f5 !important; }
+    .card-header, .modal-header, .modal-footer { background: #202c46 !important; color: #e0e7f5 !important; border-color: #33415f !important; }
+    .text-dark, .text-black, label, .form-label, .inquiry-label { color: #d7e1f5 !important; }
+    .inquiry-value { color: #f1f5ff; }
+    .form-control, .form-select, input:not([type=button]):not([type=submit]):not([type=radio]):not([type=checkbox]), select, textarea {
+        color: #e0e7f5 !important; background-color: #10182b !important; border-color: #3c4d70 !important;
+    }
+    .form-control:focus, .form-select:focus { border-color: #819bff !important; box-shadow: 0 0 0 3px #4f6fe633; }
+    input::placeholder, textarea::placeholder { color: #8e9db9 !important; }
+    .table { --bs-table-color: #e0e7f5; --bs-table-bg: #131a2e; --bs-table-striped-bg: #1a253d; --bs-table-striped-color: #e0e7f5; --bs-table-hover-bg: #243352; --bs-table-hover-color: #fff; --bs-table-border-color: #33415f; }
+    .table-info { --bs-table-bg: #253758; --bs-table-color: #e0e7f5; }
+    table, th, td { border-color: #33415f !important; }
+    th { background-color: #253758 !important; color: #e0e7f5 !important; }
+    .btn-primary { --bs-btn-bg: #4f6fe6; --bs-btn-border-color: #4f6fe6; --bs-btn-hover-bg: #6482ee; }
+    .btn-outline-secondary, .btn-outline-dark { color: #c6d3ef; border-color: #526485; }
+    .select2-container--bootstrap-5 .select2-selection,
+    .select2-container--bootstrap-5 .select2-dropdown,
+    .select2-container--bootstrap-5 .select2-search__field { background: #10182b !important; color: #e0e7f5 !important; border-color: #3c4d70 !important; }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered { color: #e0e7f5 !important; }
+    .select2-container--bootstrap-5 .select2-results__option--highlighted { background: #4f6fe6 !important; color: white !important; }
+}

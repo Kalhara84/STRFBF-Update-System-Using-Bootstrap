@@ -1,60 +1,63 @@
 <?php
-  $config_use_sessions = TRUE;  
-  session_start();
-
-  if (!$_SESSION["validated"]) 
-  { 
-    header("Location: login.php");
-    return;
-  }
-//-------------------------Check User Rights [BEGIN]-------------------------------------  
-
-$te_usdusd = $_SESSION["susdusd"];
-echo "$te_usdusd<br>";
-
-  $te_usropt="usryn";
-  $te_prgnam = $_SERVER['PHP_SELF'];
-  if ($_SESSION["susdadmin"] != "Y") 
-  { 
-   //include "a_usrval.php";
-  }
-//-------------------------Check User Rights [CLOSE]------------------------------------- 
+session_start();
+if (empty($_SESSION['validated'])) {
+    header('Location: login.php');
+    exit;
+}
+$paymentPages = array(
+    array('add', 'Add Payment Request', 'dpmenter_bs.php?cmdopt=add'),
+    array('amend', 'Amend Payment Request', 'dpmenter_bs.php?cmdopt=ame'),
+    array('approvals', 'MD Approvals', 'md_approvals.php'),
+    array('print', 'Print', 'dpmprt_pp.php'),
+    array('inquiry', 'Payment Inquiry', 'dp_inq02.php'),
+    array('documents', 'All Documents', 'inhinqtrn.php'),
+    array('list', 'Payment List', 'dplist_01.php')
+);
 ?>
-<HTML>
-  <HEAD>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/bootstrap5.min.css">
-    <TITLE>Direct Payments Request</TITLE> 
-     <link href="css/ent.css" rel="stylesheet" type="text/css"  />
-     <script src="js/ent_dashboard_dpmm.js"></script>
-
-     <STYLE></STYLE>
-
-     <SCRIPT LANGUAGE="JavaScript">
-       // Tab Name | URL | * (Default Selected Tab)
-       var tabs = new Array
-       (
-        new Array(""),
-
-        new Array("(1b)ADD Payment Request|dpmenter_bs.php?cmdopt=add"),
-        new Array("(2)AMEND-Payment Request|dpmenter_bs.php?cmdopt=ame"),
-        new Array("(3)MD Approvals|md_approvals.php"),
-        
-        new Array("(4)PRINT|dpmprt_pp.php"),
-        //new Array("(5)Cancel POD|inhcan_po.php"),
-        
-        new Array("(7)INQ-BS|dp_inq02.php"),
-        new Array("(8)INQ-ALL_DOC|inhinqtrn.php"),
-        new Array("(11)List-2|dplist_01.php")
-
-       );
-       te_title="Direct Payments (30)";
-    </SCRIPT>
-  </HEAD>
-  <BODY onload="tabOnLoad()">
-    <form>
-        <DIV ID=divTabStrip></DIV>
-        <DIV ID=divTabFrame></DIV>
-    </form>
-  </BODY>
-</HTML>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Direct Payments ? Add Payment Request</title>
+    <link rel="stylesheet" href="css/bootstrap5.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/payments.css">
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <?php include dirname(__FILE__) . '/sidebar.php'; ?>
+    <main class="main-content payment-main">
+        <div class="toolbar-actions payment-toolbar">
+            <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn" title="Toggle Sidebar" aria-label="Toggle Sidebar" aria-controls="sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M3 6h18M3 12h18M3 18h18"></path>
+                </svg>
+            </button>
+            <div class="payment-heading">
+                <p>Operations / Direct Payments</p>
+                <h1 id="paymentTitle" aria-live="polite">Add Payment Request</h1>
+            </div>
+            <a class="payment-home" href="dashboard.php">Dashboard</a>
+        </div>
+        <section class="payment-workspace" aria-label="Direct payments workspace">
+            <nav class="payment-tabs" aria-label="Payment sections">
+                <?php foreach ($paymentPages as $index => $page) { ?>
+                <a class="payment-tab<?php echo $index === 0 ? ' active' : ''; ?>"
+                   href="<?php echo htmlspecialchars($page[2], ENT_QUOTES, 'UTF-8'); ?>"
+                   target="paymentFrame" data-section="<?php echo $page[0]; ?>"
+                   <?php echo $index === 0 ? 'aria-current="page"' : ''; ?>><?php echo $page[1]; ?></a>
+                <?php } ?>
+            </nav>
+            <div class="payment-frame-wrap">
+                <p id="paymentLoading" class="payment-loading" role="status" hidden>Loading payment page?</p>
+                <iframe id="paymentFrame" name="paymentFrame" title="Add Payment Request" src="dpmenter_bs.php?cmdopt=add"></iframe>
+            </div>
+        </section>
+    </main>
+</div>
+<script src="jquery/jquery-1.10.2.min.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/ent_dashboard_dpmm.js"></script>
+</body>
+</html>

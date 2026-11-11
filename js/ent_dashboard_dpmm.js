@@ -1,115 +1,73 @@
+/* Keep payment pages in the dashboard workspace, including form submissions. */
+(function () {
+    'use strict';
+    var frame = document.getElementById('paymentFrame');
+    var title = document.getElementById('paymentTitle');
+    var loading = document.getElementById('paymentLoading');
+    var tabs = document.querySelectorAll('.payment-tab');
+    var themeUrl = new URL('css/payment-content.css', window.location.href).href;
 
-// DXImageTransform effects, assign the below DXImageTransformFilter variable to one of these desired effects.
-// More on DXImageTransform effects: http://msdn.microsoft.com/library/default.asp?url=/workshop/author/filter/filters.asp
-var DXImageTransformLibrary = new Array
-(
-	"FILTER=progid:DXImageTransform.Microsoft.Wheel(duration=2, spokes=5)",
-	"FILTER=progid:DXImageTransform.Microsoft.Barn(duration=2, orientation=horizontal)",
-	"FILTER=progid:DXImageTransform.Microsoft.Blinds(duration=2, bands=5)",
-	"FILTER=progid:DXImageTransform.Microsoft.CheckerBoard(duration=2)",
-	"FILTER=progid:DXImageTransform.Microsoft.Fade(duration=2)",
-	"FILTER=progid:DXImageTransform.Microsoft.GradientWipe(duration=2, wipeStyle=0)",
-	"FILTER=progid:DXImageTransform.Microsoft.Iris(duration=2,irisStyle=STAR)",
-	"FILTER=progid:DXImageTransform.Microsoft.Iris(duration=2,irisStyle=CIRCLE)",
-	"FILTER=progid:DXImageTransform.Microsoft.Pixelate(duration=2, maxSquare=40)",
-	"FILTER=progid:DXImageTransform.Microsoft.Wheel(duration=2, spokes=5)",
-	"FILTER=progid:DXImageTransform.Microsoft.RandomDissolve(duration=0.5)",
-	"FILTER=progid:DXImageTransform.Microsoft.Spiral(duration=2)",
-	"FILTER=progid:DXImageTransform.Microsoft.Stretch(duration=2, stretchStyle=push)",
-	"FILTER=progid:DXImageTransform.Microsoft.Strips(duration=2, motion=rightdown)"
-);
-
-
-// Assign this to one of the above DXImageTransform effects, or null for random effects.
-	/*
-		e.g.
-		var DXImageTransformFilter = "FILTER=progid:DXImageTransform.Microsoft.Fade(duration=2)";
-		or
-		var DXImageTransformFilter = DXImageTransformLibrary[4];
-		or
-		var DXImageTransformFilter = null;
-	*/
-var DXImageTransformFilter = null;
-
-/***************************************************************************************************/
-
-var HTML = "";
-
-function tabOnClick(ID, parent)
-{ 
-	var oElement = null;
-	for (var i = 1; i < tabs.length; i++)
-	{
-		oElement = document.getElementById(i);
-		oElement.className = "tabOff";
-	}	
-
-	oElement = document.getElementById(ID);
-	oElement.className = "tabOn";
-	var tab = tabs[parent][0].split("|");
-
-	HTML= "<IFRAME SRC='"+tab[1]+" 'CLASS='tabFrame'>&nbsp";
-    HTML += "</IFRAME>";
-	divTabFrame.innerHTML = HTML;
-	document.body.focus();
-}
-
-function tabLoadParents()
-{
-
-	for (var i = 1; i < tabs.length; i++)
-	{
-		var tab = tabs[i][0].split("|");
-		HTML += "<INPUT TYPE='BUTTON' ID="+i+" CLASS='tabOff' VALUE='"+tab[0]+"' onClick='tabOnClick("+i+", "+i+")'>&nbsp";
-
+    function selectTab(tab, navigate) {
+        for (var i = 0; i < tabs.length; i++) {
+            var active = tabs[i] === tab;
+            tabs[i].classList.toggle('active', active);
+            if (active) tabs[i].setAttribute('aria-current', 'page');
+            else tabs[i].removeAttribute('aria-current');
+        }
+        title.textContent = tab.textContent;
+        frame.title = tab.textContent;
+        document.title = 'Direct Payments ? ' + tab.textContent;
+        if (navigate) {
+            loading.hidden = false;
+            frame.style.visibility = 'hidden';
+            frame.src = tab.href;
+        }
     }
 
-	if (window.cmdfrom) {
-    	HTML += "<input type='button' value='MENU' name='menu' CLASS='tabOff' onClick=" + "window.location='menu"+cmdfrom+".php'" + ">"
+    function fromHash() {
+        var section = window.location.hash.slice(1) || 'add';
+        for (var i = 0; i < tabs.length; i++) {
+            if (tabs[i].getAttribute('data-section') === section) {
+                selectTab(tabs[i], true);
+                return;
+            }
+        }
+        selectTab(tabs[0], true);
     }
-    else
-    {
-	    HTML += "<input type='button' value='MENU' name='menu' CLASS='tabOff' onClick=" + "window.location='dashboard_dpmm.php'" + ">"
+
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].addEventListener('click', function (event) {
+            if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            var hash = '#' + this.getAttribute('data-section');
+            if (window.location.hash === hash) return;
+            window.location.hash = hash;
+        });
     }
 
-
-	
-}
-
-function tabOnLoad()
-{
-	HTML += "<TABLE BORDER='0' CELLPADDING='0' CELLSPACING='0' WIDTH='100%'>";
-	HTML += "<TD ALIGN='LEFT'>&nbsp;&nbsp;";
-
-	tabLoadParents();
-
-	HTML += "</TD></TR>";
-	HTML += "</TABLE>";	
-
-	divTabStrip.innerHTML = HTML;
-
-	
-	for (var i = 1; i < tabs.length; i++)
-	{
-		var tab = tabs[i][0].split("|");
-
-		if (tab[2] == "*")
-		{
-			tabOnClick(i, i, 0);
-
-			break;			
-		}
-	}
-}
-
-
-document.onkeyup = KeyCheck;       
-function KeyCheck()
-{
-   var KeyID = window.event.keyCode;
-   if(KeyID == 27)
-   {
-    parent.location="dashboard_podm.php";
-   }
-}
-
+    frame.addEventListener('load', function () {
+        function reveal() {
+            loading.hidden = true;
+            frame.style.visibility = 'visible';
+        }
+        try {
+            var page = frame.contentDocument;
+            var path = frame.contentWindow.location.pathname;
+            if (/\/(login|dashboard|logout)\.php$/.test(path)) {
+                window.location.href = frame.contentWindow.location.href;
+                return;
+            }
+            page.documentElement.setAttribute('data-bs-theme', 'dark');
+            var css = page.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = themeUrl;
+            css.onload = reveal;
+            css.onerror = reveal;
+            page.head.appendChild(css);
+        } catch (error) {
+            reveal();
+        }
+    });
+    window.addEventListener('hashchange', fromHash);
+    if (window.location.hash) fromHash();
+})();
