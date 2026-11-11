@@ -24,8 +24,8 @@
        Modular PHP component included into this dashboard layout.
    ============================================================================== */
 
-// Start session to access logged-in user information
-if (session_status() === PHP_SESSION_NONE) {
+// Start session to access logged-in user information (PHP 5.3+ compatible)
+if (!isset($_SESSION)) {
     session_start();
 }
 

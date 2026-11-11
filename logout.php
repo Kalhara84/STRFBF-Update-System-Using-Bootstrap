@@ -11,8 +11,8 @@
    - Redirects cleanly to login.php.
    ============================================================================== */
 
-// Start session if not started
-if (session_status() === PHP_SESSION_NONE) {
+// Start session if not started (PHP 5.3+ compatible)
+if (!isset($_SESSION)) {
     session_start();
 }
 
