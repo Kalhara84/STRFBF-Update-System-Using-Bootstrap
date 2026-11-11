@@ -1,0 +1,107 @@
+
+ @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+ /*body{font-family: 'Roboto', sans-serif !important; }*/
+  body{font-family: 'Lato', sans-serif !important; }
+BODY
+{
+	BACKGROUND-COLOR: #FFFFFF;
+	SCROLL: NO;
+}
+
+.tabFrame
+{
+	/*BORDER-RIGHT: #AAAAFF 9PX SOLID;
+	BORDER-TOP: #AAAAFF 9PX SOLID;
+	SCROLLBAR-FACE-COLOR: #6699CC;
+	SCROLLBAR-HIGHLIGHT-COLOR: #FFFFFF;
+	BORDER-LEFT: #AAAAFF 9PX SOLID; 
+	SCROLLBAR-SHADOW-COLOR: #6699CC;
+	SCROLLBAR-ARROW-COLOR: #FFFFFF;
+	BORDER-BOTTOM: #AAAAFF 9PX SOLID;
+	SCROLLBAR-DARKSHADOW-COLOR: #6699CC;*/
+	WIDTH: 100%;
+	HEIGHT: 95%;
+}
+
+.tabOff
+{
+	font-family: 'Lato', sans-serif !important;
+	FONT-SIZE: 12px;
+	FONT-WEIGHT: 100;
+	TEXT-ALIGN: CENTER;
+	COLOR: #000000;
+	
+	/*BACKGROUND-COLOR: #FBEDBB;
+	BORDER-BOTTOM: #FBEDBB 1PX SOLID;
+	BORDER-TOP: #AAAAFF 1PX SOLID;
+	BORDER-LEFT: #AAAAFF 1PX SOLID;
+	BORDER-RIGHT: #AAAAFF 1PX SOLID;*/
+
+
+	background-color: #008CBA; /* blue */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 12px;
+	/*ADD BY JUDE 02112022*/
+	border: 3px BLUE; 
+	padding: 20px;
+	HEIGHT: 20px;
+	CURSOR: pointer;
+
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+.tabOff:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+.tabOn
+{
+	FONT-FAMILY: Verdana;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: 700;
+	TEXT-ALIGN: RIGHT;
+	/*COLOR: #FFFFFF;*/
+/*	BACKGROUND-COLOR: #AAAAFF;
+	BORDER-BOTTOM: #AAAAFF 1PX SOLID;
+	BORDER-TOP: #AAAAFF 1PX SOLID;
+	BORDER-LEFT: #AAAAFF 1PX SOLID;
+	BORDER-RIGHT: #000000 1PX SOLID;*/
+	HEIGHT: 20px;
+	CURSOR: pointer;
+	
+	/*ADD BY JUDE 02112022*/
+	border: 3px BLUE; 
+	padding: 20px;
+	HEIGHT: 20px;
+	CURSOR: pointer;
+
+}
+/*  31/08/2021*/
+.tabOff:hover {
+       /* transform: scale(1.5);*/
+        transform: scale(1.2);
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+
+.grid,.row{
+  /*animation: transitionIn 0.75s;*/
+  animation: transitionIn 1s;
+}
+@keyframes transitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
