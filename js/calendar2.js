@@ -49,8 +49,8 @@ function cal_popup2 (str_datetime) {
 	  if (!this.dt_current) return;
       
 	  var obj_calwindow = window.open(
-	  	'js/calendar.html?datetime=' + this.dt_current.valueOf()+ '&id=' + this.id,
-	  	'Calendar', 'width=200,height='+(this.time_comp ? 215 : 190)+
+	  	'calendar.html?datetime=' + this.dt_current.valueOf()+ '&id=' + this.id,
+	  	'Calendar', 'width=240,height='+(this.time_comp ? 250 : 230)+
 	  	',status=no,resizable=no,top=200,left=200,dependent=yes,alwaysRaised=yes'
 	  );
 	  obj_calwindow.opener = window;
