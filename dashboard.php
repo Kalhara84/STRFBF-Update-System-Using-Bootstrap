@@ -66,15 +66,14 @@ $companyNews    = !empty($_SESSION['company_news']) ? $_SESSION['company_news'] 
     <!-- Main Content Area -->
     <main class="main-content">
 
-        <!-- Top Action Button with Matching Sleek Icon (User Request 3) -->
+        <!-- Top Action Button: Sleek icon-only toggle button (text removed as requested) -->
         <div class="toolbar-actions">
-            <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn" title="Toggle Sidebar">
-                <svg class="toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <button type="button" class="btn-toggle-sidebar" id="sidebarToggleBtn" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+                <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
-                <span>Toggle Sidebar</span>
             </button>
         </div>
 

@@ -11,10 +11,10 @@
    - Red Logout Button: Styled via .sidebar-logout-btn in css/dashboard.css
    ============================================================================== */
 
-$companyName = !empty($_SESSION['scomnam']) && $_SESSION['scomnam'] !== 'Ravi Breeder Farm' 
-    ? $_SESSION['scomnam'] 
+$companyName = !empty($_SESSION['scomnam']) && $_SESSION['scomnam'] !== 'Ravi Breeder Farm'
+    ? $_SESSION['scomnam']
     : 'Ramico International (Pvt) Ltd';
-$loggedUser  = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
+$loggedUser = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
 ?>
 
 <!-- SIDEBAR COMPONENT (Dark Navy Midnight Theme) -->
@@ -34,7 +34,7 @@ $loggedUser  = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
         </div>
 
         <!-- Section Title -->
-        <div class="sidebar-section-title">TEA EXPORT SYSTEM</div>
+        <div class="sidebar-section-title">Dashboard Sidebar</div>
 
         <!-- Navigation Menu -->
         <ul class="sidebar-nav">
@@ -97,7 +97,8 @@ $loggedUser  = !empty($_SESSION['susdusd']) ? $_SESSION['susdusd'] : '2000';
     <!-- Sidebar Footer: Distinct Red Logout Button (User Request 4) -->
     <div class="sidebar-footer">
         <a href="logout.php" class="sidebar-logout-btn" title="Sign Out">
-            <svg class="sidebar-logout-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="sidebar-logout-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 <polyline points="16 17 21 12 16 7"></polyline>
                 <line x1="21" y1="12" x2="9" y2="12"></line>

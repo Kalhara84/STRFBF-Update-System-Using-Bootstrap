@@ -58,34 +58,44 @@ html, body {
 }
 
 .sidebar-header {
-    padding: 24px 20px 16px 22px;
+    padding: 24px 18px 16px 18px;
+    text-align: center;
 }
 
-/* Sidebar Logo above company name */
+/* Sidebar Logo centered and larger (User Request) */
 .sidebar-logo-wrap {
-    margin-bottom: 14px;
-    display: inline-block;
+    margin: 0 auto 14px auto;
+    display: block;
+    text-align: center;
 }
 
 .sidebar-logo-img {
-    width: 48px;
-    height: 48px;
+    width: 76px;
+    height: 76px;
     object-fit: contain;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    padding: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    display: block;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px;
+    border: 2px solid rgba(79, 111, 230, 0.45);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sidebar-logo-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(79, 111, 230, 0.35);
 }
 
 /* Company Title & User */
 .sidebar-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     line-height: 1.35;
     margin: 0 0 6px 0;
     color: #ffffff;
     letter-spacing: 0.2px;
+    text-align: center;
 }
 
 .sidebar-subtitle {
@@ -93,6 +103,7 @@ html, body {
     color: rgba(255, 255, 255, 0.65);
     margin: 0;
     font-weight: 400;
+    text-align: center;
 }
 
 /* Section Title: e.g. "TEA EXPORT SYSTEM" */
@@ -239,20 +250,20 @@ html, body {
     margin-bottom: 24px;
 }
 
-/* Toggle Sidebar Button with matching sleek icon */
+/* Toggle Sidebar Button - Sleek Icon-only button (User Request) */
 .btn-toggle-sidebar {
     background-color: #4f6fe6;
     border: none;
     color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 9px 20px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     border-radius: 8px;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
     transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
-    box-shadow: 0 4px 12px rgba(79, 111, 230, 0.32);
+    box-shadow: 0 4px 12px rgba(79, 111, 230, 0.35);
     cursor: pointer;
     text-decoration: none;
 }
@@ -263,7 +274,7 @@ html, body {
     color: #ffffff;
     text-decoration: none;
     outline: none;
-    box-shadow: 0 6px 16px rgba(79, 111, 230, 0.42);
+    box-shadow: 0 6px 16px rgba(79, 111, 230, 0.45);
     transform: translateY(-1px);
 }
 
@@ -273,6 +284,9 @@ html, body {
 
 .toggle-icon {
     display: inline-block;
+    width: 20px;
+    height: 20px;
+}
     vertical-align: middle;
 }
 
