@@ -23,8 +23,8 @@ $o = new HtmlFormsObjects;
 
 $te_usdusd	    = $_SESSION["susdusd"];
 $te_grlucdnew	= $te_usdusd;
-$te_grlenttime  = strftime('%H:%M:%S');
-$te_grlentddt	= strftime("%Y-%m-%d");
+$te_grlenttime  = date('H:i:s');
+$te_grlentddt	= date("Y-m-d");
 
 $te_slocsno	    = $_SESSION["slocsno"];
 $te_os          = $_SESSION["sOS"];
@@ -40,7 +40,7 @@ sajax_export("load_dnodd");  //dropdown
 sajax_handle_client_request();
 //--------------------------------------------------//
 
-$te_inhddt 	= strftime("%d/%m/%Y");
+$te_inhddt 	= date("d/m/Y");
 $te_inhcomsno	= "";
 $te_inhtyp	= "";  //
 $te_inhdno	= "";
@@ -48,7 +48,7 @@ $te_inhsno = '';
 $te_syssno = '';
 $te_syssnoauto = '';
 
-$te_sysddt = strftime("%d/%m/%Y");
+$te_sysddt = date("d/m/Y");
 $te_sysddt = "var te_sysddt = '".$te_sysddt."';\n";
 $te_ok='n';
 if (isset($_GET['inhsno']))
