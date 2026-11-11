@@ -1,0 +1,2 @@
+/* Common script file for the login page.
+   Add your own JavaScript code here. */
