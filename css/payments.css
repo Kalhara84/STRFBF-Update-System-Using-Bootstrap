@@ -1,6 +1,6 @@
 /* ==============================================================================
    FILE: css/payments.css
-   PURPOSE: Direct Payments workspace layout & Royal Blue highlighted Tabs.
+   PURPOSE: Direct Payments workspace layout & Connected Tabs with Blue Highlight.
    ============================================================================== */
 
 .payment-main { 
@@ -62,25 +62,27 @@
 }
 
 /* ==============================================================================
-   PAYMENT TABS - Clean Modern Tabs with Vibrant Royal Blue Active Highlight
+   CONNECTED TABS WITH SOLID ROYAL BLUE ACTIVE HIGHLIGHT
    ============================================================================== */
 .payment-tabs { 
     display: flex; 
-    align-items: center;
+    align-items: flex-end;
     flex-wrap: wrap; 
-    gap: 8px; 
-    padding: 14px 18px; 
-    border-bottom: 1px solid #24304e; 
+    gap: 5px; 
+    padding: 14px 18px 0 18px; 
+    border-bottom: 2px solid #24304e; 
     background: #0d1322;
 }
 
-/* Base Tab item */
+/* Tab item - Connected tab shape with rounded top and flat baseline */
 .payment-tab { 
-    padding: 9px 18px; 
-    border-radius: 8px; 
-    color: #b4c5ea; 
-    background-color: rgba(255, 255, 255, 0.04); 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 20px; 
+    border-radius: 8px 8px 0 0; 
+    color: #a8bbe2; 
+    background-color: #101729; 
+    border: 1px solid #1f2c4c; 
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px; /* Sits flush on the bottom baseline */
     font-size: 14px; 
     font-weight: 500; 
     text-decoration: none; 
@@ -90,25 +92,27 @@
     justify-content: center;
     cursor: pointer;
     user-select: none;
+    position: relative;
     letter-spacing: 0.15px;
 }
 
 /* Hover state on inactive tabs */
 .payment-tab:hover { 
     color: #ffffff; 
-    background-color: rgba(79, 111, 230, 0.16); 
-    border-color: rgba(79, 111, 230, 0.4); 
+    background-color: #182440; 
+    border-color: #2d3e68; 
     text-decoration: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-/* Active Tab state - Vibrant Solid Royal Blue (#4f6fe6) Highlight */
+/* Active Tab state - Connected Tab Shape + Solid Royal Blue Highlight */
 .payment-tab.active { 
     color: #ffffff !important; 
     background-color: #4f6fe6 !important; 
     border-color: #4f6fe6 !important;
+    border-bottom: 2px solid #4f6fe6 !important;
+    border-radius: 8px 8px 0 0 !important;
     font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgba(79, 111, 230, 0.45) !important;
+    box-shadow: 0 -4px 16px rgba(79, 111, 230, 0.45) !important;
     z-index: 2;
 }
 
@@ -151,6 +155,6 @@
     .payment-toolbar { gap: 10px; }
     .payment-heading h1 { font-size: 17px; }
     .payment-home { padding: 8px; font-size: 11px; }
-    .payment-tabs { flex-wrap: nowrap; overflow-x: auto; padding: 10px; gap: 6px; }
+    .payment-tabs { flex-wrap: nowrap; overflow-x: auto; padding: 10px 10px 0 10px; gap: 4px; }
     .payment-tab { flex-shrink: 0; padding: 8px 14px; font-size: 13px; }
 }
