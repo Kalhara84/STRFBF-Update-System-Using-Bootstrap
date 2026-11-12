@@ -718,6 +718,37 @@ if(isset($_POST['ok']))
 <link href="css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="css/select2-bootstrap-5-theme.min.css" />
 
+<style>
+/* Field validation red highlighting */
+.field-invalid,
+.form-control.field-invalid,
+input.form-control.field-invalid,
+.input-group.field-invalid > .form-control,
+.input-group.field-invalid > .btn {
+    border-color: #dc3545 !important;
+    border-width: 2px !important;
+}
+
+.form-control.field-invalid,
+input.form-control.field-invalid {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    background-color: #fff8f8 !important;
+}
+
+.input-group.field-invalid {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    border-radius: 0.375rem;
+}
+
+.field-validation-msg {
+    color: #dc3545;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 4px;
+    display: none;
+}
+</style>
+
 <script src="jquery/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap5.bundle.min.js"></script>
 <script src="js/select2.min.js"></script>
@@ -817,32 +848,176 @@ function valkey()
  return true;
 }
 
+function validateInhddt(showAlert) {
+    var fld = document.getElementById('inhddt');
+    if (!fld) return true;
+    var $grp = $(fld).closest('.input-group');
+    var msg = document.getElementById('inhddt_msg');
+    var val = fld.value ? fld.value.trim() : '';
+    
+    var isValid = false;
+    var errorText = "Date must be in dd/mm/yyyy format (e.g. 12/11/2026)";
+
+    if (val === '') {
+        errorText = "Date is required (format: dd/mm/yyyy)";
+    } else {
+        var regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        var match = val.match(regex);
+        if (!match) {
+            errorText = "Invalid format! Date must be dd/mm/yyyy (e.g. 12/11/2026)";
+        } else {
+            var day = parseInt(match[1], 10);
+            var month = parseInt(match[2], 10);
+            var year = parseInt(match[3], 10);
+
+            if (year < 1900 || year > 2100) {
+                errorText = "Year must be between 1900 and 2100";
+            } else if (month < 1 || month > 12) {
+                errorText = "Month must be between 01 and 12";
+            } else {
+                var isLeap = (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
+                var daysInMonth = [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                if (day < 1 || day > daysInMonth[month - 1]) {
+                    errorText = "Invalid day (" + day + ") for month " + month;
+                } else {
+                    isValid = true;
+                }
+            }
+        }
+    }
+
+    if (!isValid) {
+        $(fld).addClass('field-invalid is-invalid');
+        $grp.addClass('field-invalid');
+        if (msg) {
+            msg.innerText = errorText;
+            msg.style.display = 'block';
+        }
+        if (showAlert) {
+            alert(errorText);
+        }
+        return false;
+    } else {
+        $(fld).removeClass('field-invalid is-invalid');
+        $grp.removeClass('field-invalid');
+        if (msg) {
+            msg.innerText = '';
+            msg.style.display = 'none';
+        }
+        return true;
+    }
+}
+
+function validateInhsupnam(showAlert) {
+    var fld = document.getElementById('inhsupnam');
+    if (!fld) return true;
+    var msg = document.getElementById('inhsupnam_msg');
+    var val = fld.value ? fld.value.trim() : '';
+    var isValid = false;
+    var errorText = "Supplier Name must be between 10 and 30 characters";
+
+    if (val.length === 0) {
+        errorText = "Supplier Name is required (10 to 30 characters)";
+    } else if (val.length < 10) {
+        errorText = "Supplier Name must be at least 10 characters (currently " + val.length + ")";
+    } else if (val.length > 30) {
+        errorText = "Supplier Name cannot exceed 30 characters (currently " + val.length + ")";
+    } else {
+        isValid = true;
+    }
+
+    if (!isValid) {
+        $(fld).addClass('field-invalid is-invalid');
+        if (msg) {
+            msg.innerText = errorText;
+            msg.style.display = 'block';
+        }
+        if (showAlert) {
+            alert(errorText);
+        }
+        return false;
+    } else {
+        $(fld).removeClass('field-invalid is-invalid');
+        if (msg) {
+            msg.innerText = '';
+            msg.style.display = 'none';
+        }
+        return true;
+    }
+}
+
+function validateInhval(showAlert) {
+    var fld = document.getElementById('inhval');
+    if (!fld) return true;
+    var msg = document.getElementById('inhval_msg');
+    var val = fld.value ? fld.value.trim() : '';
+    var num = parseFloat(val);
+    var isValid = false;
+    var errorText = "Amount Paid must be greater than 1";
+
+    if (val === '' || isNaN(num)) {
+        errorText = "Amount Paid is required and must be a number > 1";
+    } else if (num <= 1) {
+        errorText = "Amount Paid must be greater than 1 (entered: " + val + ")";
+    } else {
+        isValid = true;
+    }
+
+    if (!isValid) {
+        $(fld).addClass('field-invalid is-invalid');
+        if (msg) {
+            msg.innerText = errorText;
+            msg.style.display = 'block';
+        }
+        if (showAlert) {
+            alert(errorText);
+        }
+        return false;
+    } else {
+        $(fld).removeClass('field-invalid is-invalid');
+        if (msg) {
+            msg.innerText = '';
+            msg.style.display = 'none';
+        }
+        return true;
+    }
+}
+
 function valdata()
 {   
- var fld =document.fn.inhddt
- if (chkBlank(fld) == false) { fld.focus(); return false; }
- if(fld.value) {
-  if (isDate(fld.value)==false) { fld.focus(); return false; }
- }
- var dt1 = document.fn.inhddt   
- if(comparedates(dt1.value,te_sysddt)==true) {
-  alert ("Server date is "+ te_sysddt +"\nDate Should lesser than to Server date");
-  fld.focus();
-  return false;        
- }
- 
- /*
- var fld = document.fn.inhsupsno;
- if (chkBlank(fld) == false) { fld.focus(); return false; }
- */
- 
- var fld = document.fn.inhcoqsno;
- if (chkBlank(fld) == false) { fld.focus(); return false; }
- 
- var fld = document.fn.inhsupnam;
- if (chkBlank(fld) == false) { fld.focus(); return false; }
- 
- return true; 
+    var isDdtOk = validateInhddt(false);
+    var isSupOk = validateInhsupnam(false);
+    var isValOk = validateInhval(false);
+    
+    if (!isDdtOk) {
+        validateInhddt(true);
+        if (document.fn.inhddt) document.fn.inhddt.focus();
+        return false;
+    }
+    
+    var dt1 = document.fn.inhddt;
+    if(dt1 && comparedates(dt1.value, te_sysddt) == true) {
+        alert("Server date is " + te_sysddt + "\nDate Should lesser than to Server date");
+        dt1.focus();
+        return false;        
+    }
+    
+    if (!isSupOk) {
+        validateInhsupnam(true);
+        if (document.fn.inhsupnam) document.fn.inhsupnam.focus();
+        return false;
+    }
+    
+    if (!isValOk) {
+        validateInhval(true);
+        if (document.fn.inhval) document.fn.inhval.focus();
+        return false;
+    }
+    
+    var fld = document.fn.inhcoqsno;
+    if (chkBlank(fld) == false) { fld.focus(); return false; }
+    
+    return true; 
 } 
 
 // -------------------------------------------------------------
@@ -1104,6 +1279,37 @@ $(document).ready(function() {
     
     // Run initial validation check
     calculateTotal();
+
+    // Live validation listeners for Date, Supplier Name, and Amount Paid
+    $('#inhddt').on('input keyup blur change', function() {
+        validateInhddt(false);
+    });
+
+    $('#inhsupnam').on('input keyup blur change', function() {
+        validateInhsupnam(false);
+    });
+
+    $('#inhval').on('input keyup blur change', function() {
+        validateInhval(false);
+        calculateTotal();
+    });
+
+    // Check for changes made via calendar popup
+    var lastInhddtVal = $('#inhddt').val();
+    setInterval(function() {
+        var currentVal = $('#inhddt').val();
+        if (currentVal !== lastInhddtVal) {
+            lastInhddtVal = currentVal;
+            validateInhddt(false);
+        }
+    }, 300);
+
+    // Initial validation check if section is visible
+    if ($('#divhead').is(':visible')) {
+        if ($('#inhddt').val()) validateInhddt(false);
+        if ($('#inhsupnam').val()) validateInhsupnam(false);
+        if ($('#inhval').val()) validateInhval(false);
+    }
 });
 </SCRIPT>
 </head>
@@ -1164,18 +1370,21 @@ $(document).ready(function() {
                 <div class="col-md-3">
                     <label class='form-label fw-bold'>Date:</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="inhddt" id="inhddt" value="<?php echo $te_inhddt?>" onkeypress="return enter(document.fn.inhsupnam);">
+                        <input type="text" class="form-control" name="inhddt" id="inhddt" value="<?php echo $te_inhddt?>" onkeypress="return enter(document.fn.inhsupnam);" oninput="validateInhddt(false);" onchange="validateInhddt(false);">
                         <button class="btn btn-outline-secondary" type="button" onclick="cal.popup();"><img src="img/cal.gif" width="16" height="16" alt="Pick Date"></button>
                     </div>
+                    <div class="field-validation-msg" id="inhddt_msg"></div>
                     <SCRIPT LANGUAGE="JavaScript">var cal = new calendar2(document.fn.inhddt); cal.year_scroll = true; cal.time_comp = false;</SCRIPT>       
                 </div>
                 <div class="col-md-3">
                     <label class='form-label fw-bold'>Supplier Name:</label>
-                    <input type="text" class="form-control form-control-sm" name="inhsupnam" id="inhsupnam" onblur="this.value=this.value.toUpperCase();" value="<?php echo $te_inhsupnam; ?>" onkeypress="return enter(document.fn.inhval);">
+                    <input type="text" class="form-control form-control-sm" name="inhsupnam" id="inhsupnam" onblur="this.value=this.value.toUpperCase(); validateInhsupnam(false);" oninput="validateInhsupnam(false);" value="<?php echo $te_inhsupnam; ?>" onkeypress="return enter(document.fn.inhval);">
+                    <div class="field-validation-msg" id="inhsupnam_msg"></div>
                 </div>
                 <div class="col-md-3">
                     <label class='form-label fw-bold'>Amount Paid:</label>
-                    <INPUT TYPE="number" step="0.01" class="form-control form-control-sm" NAME="inhval" id="inhval" VALUE="<?php echo $te_inhval?>" onkeypress="return enter(document.fn.inhcoqsno);" onkeyup="calculateTotal()" onchange="calculateTotal()">
+                    <INPUT TYPE="number" step="0.01" class="form-control form-control-sm" NAME="inhval" id="inhval" VALUE="<?php echo $te_inhval?>" onkeypress="return enter(document.fn.inhcoqsno);" oninput="validateInhval(false); calculateTotal();" onkeyup="calculateTotal(); validateInhval(false);" onchange="calculateTotal(); validateInhval(false);">
+                    <div class="field-validation-msg" id="inhval_msg"></div>
                 </div>
                 <div class="col-md-3">
                     <label class='form-label fw-bold'>Payment Method:</label>
